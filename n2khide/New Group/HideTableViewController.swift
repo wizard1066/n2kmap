@@ -283,11 +283,13 @@ class HideTableViewController: UITableViewController, UIPopoverPresentationContr
             if windowView == .playing, listOfPoint2Search.count > 0 {
                 cell?.nameLabel.text = listOfPoint2Search[indexPath.row].name
                 cell?.timeLabel.text = listOfPoint2Search[indexPath.row].find
-                if !listOfPoint2Search[indexPath.row].bon! {
-                    cell?.challengeImage.image = UIImage(named: "sad")
-                }
-                if listOfPoint2Search[indexPath.row].bon! {
-                    cell?.challengeImage.image = UIImage(named: "happy")
+                if listOfPoint2Search[indexPath.row].bon != nil {
+                    if !listOfPoint2Search[indexPath.row].bon! {
+                        cell?.challengeImage.image = UIImage(named: "sad")
+                    }
+                    if listOfPoint2Search[indexPath.row].bon! {
+                        cell?.challengeImage.image = UIImage(named: "happy")
+                    }
                 }
             }
             return cell!
