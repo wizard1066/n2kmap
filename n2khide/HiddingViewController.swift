@@ -128,7 +128,6 @@ class HiddingViewController: UIViewController, UIDropInteractionDelegate, MKMapV
            
             var box2M: String!
             for (k2U, V2U) in WP2P {
-//                print("\(k2U) \(V2U.coordinate.longitude) \(V2U.coordinate.latitude)")
                 if V2U.coordinate.longitude == longitude, V2U.coordinate.latitude == latitude {
                     box2M = k2U
                 }
