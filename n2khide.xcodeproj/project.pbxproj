@@ -78,14 +78,14 @@
 			path = Resources;
 			sourceTree = "<group>";
 		};
-		EF15FA3220F74C3A0065F16D /* New Group */ = {
+		EF15FA3220F74C3A0065F16D /* Table Group */ = {
 			isa = PBXGroup;
 			children = (
 				EF85869520BE845100A21777 /* HideTableViewController.swift */,
 				EFE908B420F492C400C73501 /* ZoneTableViewCell.swift */,
 				EF15FA3020F74C300065F16D /* SearchTableViewCell.swift */,
 			);
-			path = "New Group";
+			path = "Table Group";
 			sourceTree = "<group>";
 		};
 		EF258B8B20C7D1D10089EB4D /* Frameworks */ = {
@@ -118,7 +118,7 @@
 			isa = PBXGroup;
 			children = (
 				EF258B8A20C7D1CD0089EB4D /* n2khide.entitlements */,
-				EF15FA3220F74C3A0065F16D /* New Group */,
+				EF15FA3220F74C3A0065F16D /* Table Group */,
 				EFF07FAF20C03B160018C8C7 /* Common.swift */,
 				EF56461720BD9A4C00F500F6 /* AppDelegate.swift */,
 				EF56461B20BD9A4C00F500F6 /* Main.storyboard */,
