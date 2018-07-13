@@ -38,7 +38,7 @@
 		EF258B8A20C7D1CD0089EB4D /* n2khide.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = n2khide.entitlements; sourceTree = "<group>"; };
 		EF258B8C20C7D1D10089EB4D /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		EF40AAB520C6F83100CF6B3E /* CustomItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomItem.swift; sourceTree = "<group>"; };
-		EF56461420BD9A4C00F500F6 /* n2khide.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = n2khide.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		EF56461420BD9A4C00F500F6 /* n2k Map.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "n2k Map.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		EF56461720BD9A4C00F500F6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		EF56461C20BD9A4C00F500F6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		EF56461E20BD9A4E00F500F6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -109,7 +109,7 @@
 		EF56461520BD9A4C00F500F6 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				EF56461420BD9A4C00F500F6 /* n2khide.app */,
+				EF56461420BD9A4C00F500F6 /* n2k Map.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -143,9 +143,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		EF56461320BD9A4C00F500F6 /* n2khide */ = {
+		EF56461320BD9A4C00F500F6 /* n2k Map */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = EF56462620BD9A4E00F500F6 /* Build configuration list for PBXNativeTarget "n2khide" */;
+			buildConfigurationList = EF56462620BD9A4E00F500F6 /* Build configuration list for PBXNativeTarget "n2k Map" */;
 			buildPhases = (
 				EF56461020BD9A4C00F500F6 /* Sources */,
 				EF56461120BD9A4C00F500F6 /* Frameworks */,
@@ -155,9 +155,9 @@
 			);
 			dependencies = (
 			);
-			name = n2khide;
+			name = "n2k Map";
 			productName = n2khide;
-			productReference = EF56461420BD9A4C00F500F6 /* n2khide.app */;
+			productReference = EF56461420BD9A4C00F500F6 /* n2k Map.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -202,7 +202,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				EF56461320BD9A4C00F500F6 /* n2khide */,
+				EF56461320BD9A4C00F500F6 /* n2k Map */,
 			);
 		};
 /* End PBXProject section */
@@ -430,7 +430,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		EF56462620BD9A4E00F500F6 /* Build configuration list for PBXNativeTarget "n2khide" */ = {
+		EF56462620BD9A4E00F500F6 /* Build configuration list for PBXNativeTarget "n2k Map" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				EF56462720BD9A4E00F500F6 /* Debug */,

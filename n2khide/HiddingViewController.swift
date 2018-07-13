@@ -155,10 +155,7 @@ class HiddingViewController: UIViewController, UIDropInteractionDelegate, MKMapV
             let wp2FLat = self.getLocationDegreesFrom(latitude: currentLocation.coordinate.latitude)
             let wp2FLog = self.getLocationDegreesFrom(longitude: currentLocation.coordinate.longitude)
             let hint2D = wp2FLat + wp2FLog
-//             let uniqueName = UUID().uuidString
             let uniqueName =  returnUUID(Source2U: hint2D)
-//            let wayNames = Array(wayPoints.keys)
-//            let uniqueName = "GPS".madeUnique(withRespectTo: wayNames)
            
             
             let waypoint2 = MyPointAnnotation()
@@ -167,7 +164,6 @@ class HiddingViewController: UIViewController, UIDropInteractionDelegate, MKMapV
             MKPinAnnotationView.greenPinColor()
             waypoint2.subtitle = nil
             
-//            updateWayname(waypoint2U: waypoint2, image2U: nil)
             mapView.addAnnotation(waypoint2)
              let boxes = self.doBoxV2(latitude2D: waypoint2.coordinate.latitude, longitude2D: waypoint2.coordinate.longitude, name: uniqueName)
             var box2F:[CLLocation] = []
@@ -182,7 +178,6 @@ class HiddingViewController: UIViewController, UIDropInteractionDelegate, MKMapV
     
     private func selectSet(set2U:[CLLocation], type2U: Int, size2R: Int) -> CLLocationCoordinate2D {
         
-        print("fcuk01072018 selectSet \(set2U)")
         var selectedCord:Double!
         switch size2R {
             case size2U.min:
@@ -226,14 +221,6 @@ class HiddingViewController: UIViewController, UIDropInteractionDelegate, MKMapV
         return selectedSet
     }
     
-//   var  zonesReturned = false {
-//        didSet {
-//            if zoneTable["Saved"] == nil {
-//                    print("fcuk05072018 \(zoneTable)")
-//                    saveZone(zone2S: CKRecordZone(zoneName: "Saved"))
-//            }
-//        }
-//    }
     
     private func listAllZones()  {
         let operation = CKFetchRecordZonesOperation.fetchAllRecordZonesOperation()
