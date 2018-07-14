@@ -23,6 +23,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     var locationManager:CLLocationManager? = CLLocationManager()
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey : Any]? = nil) -> Bool {
+        UIBarButtonItem.appearance().setTitleTextAttributes(
+            [NSAttributedStringKey.font : UIFont(name: "AvenirNextCondensed-Regular", size: 16)!], for: .normal)
         order2Search = 0
         usingMode = op.recording
         locationManager?.delegate = self

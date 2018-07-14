@@ -24,6 +24,7 @@ class EditWaypointController: UIViewController, UIDropInteractionDelegate, UIIma
     
     //MARK: Camera and Library routines
     
+    @IBOutlet weak var dragDrop: UIButton!
     @IBOutlet weak var CameraButton: UIButton! {
         didSet {
             CameraButton.isEnabled = UIImagePickerController.isSourceTypeAvailable(.camera)
@@ -83,6 +84,9 @@ class EditWaypointController: UIViewController, UIDropInteractionDelegate, UIIma
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            dragDrop.alpha = 0.2
+        }
         nameTextField.text = nameText
         hintTextField.text = hintText
         challengeTextField.text = challengeText

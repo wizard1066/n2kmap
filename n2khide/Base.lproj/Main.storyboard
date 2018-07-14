@@ -21,7 +21,7 @@
         <!--Edit Waypoint Controller-->
         <scene sceneID="4o1-fP-MX7">
             <objects>
-                <viewController id="89x-Hb-n98" customClass="EditWaypointController" customModule="n2khide" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="89x-Hb-n98" customClass="EditWaypointController" customModule="n2k_Map" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="f61-3d-r5G">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="210"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -57,77 +57,77 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="z5D-0U-KQ1">
                                 <rect key="frame" x="14.5" y="130" width="291" height="68"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Wt2-lW-vZs">
-                                        <rect key="frame" x="84" y="-0.5" width="60" height="60"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" relation="lessThanOrEqual" constant="60" id="WqU-FB-dC7"/>
-                                            <constraint firstAttribute="height" constant="60" id="biT-1Y-6vz"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" name="StarStrella" family="Star Strella" pointSize="10"/>
-                                        <inset key="titleEdgeInsets" minX="0.0" minY="56" maxX="0.0" maxY="0.0"/>
-                                        <state key="normal" title="{DragDrop}" backgroundImage="down">
-                                            <color key="titleColor" red="0.016804177310000001" green="0.19835099580000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        </state>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="alN-3G-3Xl">
-                                        <rect key="frame" x="215" y="0.0" width="60" height="60"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" relation="lessThanOrEqual" constant="60" id="O07-zZ-9Nx"/>
-                                            <constraint firstAttribute="height" constant="60" id="ycR-eD-nvy"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" name="StarStrella" family="Star Strella" pointSize="11"/>
-                                        <inset key="titleEdgeInsets" minX="0.0" minY="56" maxX="0.0" maxY="0.0"/>
-                                        <state key="normal" title="{Library}" backgroundImage="picture-1">
-                                            <color key="titleColor" red="0.016804177310000001" green="0.19835099580000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="Library:" destination="89x-Hb-n98" eventType="touchUpInside" id="g9P-TU-oxr"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6b7-1o-tNs">
-                                        <rect key="frame" x="16" y="0.0" width="60" height="60"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="60" id="5ws-Tb-43i"/>
-                                            <constraint firstAttribute="width" relation="lessThanOrEqual" constant="60" id="d1A-89-npf"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" name="StarStrella" family="Star Strella" pointSize="10"/>
-                                        <inset key="titleEdgeInsets" minX="0.0" minY="56" maxX="0.0" maxY="0.0"/>
-                                        <state key="normal" title="{Browser}" backgroundImage="globe">
-                                            <color key="titleColor" red="0.016804177310000001" green="0.19835099580000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="WebBrowser:" destination="89x-Hb-n98" eventType="touchUpInside" id="edb-Dq-YuO"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="x1i-WY-DjV">
-                                        <rect key="frame" x="147" y="0.0" width="60" height="60"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" relation="lessThanOrEqual" constant="60" id="Hsa-LP-8Pr"/>
-                                            <constraint firstAttribute="height" constant="60" id="v0a-BG-Oar"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" name="StarStrella" family="Star Strella" pointSize="11"/>
-                                        <inset key="titleEdgeInsets" minX="0.0" minY="56" maxX="0.0" maxY="0.0"/>
-                                        <inset key="imageEdgeInsets" minX="0.0" minY="8" maxX="0.0" maxY="0.0"/>
-                                        <state key="normal" title="{Camera}" backgroundImage="camera">
-                                            <color key="titleColor" red="0.016804177310000001" green="0.19835099580000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="Camera:" destination="89x-Hb-n98" eventType="touchUpInside" id="Hvt-hd-6Fw"/>
-                                        </connections>
-                                    </button>
+                                    <stackView opaque="NO" contentMode="scaleToFill" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="Cdn-iZ-nUx">
+                                        <rect key="frame" x="14" y="4" width="264" height="60"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6b7-1o-tNs">
+                                                <rect key="frame" x="0.0" y="0.0" width="60" height="60"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="60" id="5ws-Tb-43i"/>
+                                                    <constraint firstAttribute="width" relation="lessThanOrEqual" constant="60" id="d1A-89-npf"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" name="StarStrella" family="Star Strella" pointSize="10"/>
+                                                <inset key="titleEdgeInsets" minX="0.0" minY="56" maxX="0.0" maxY="0.0"/>
+                                                <state key="normal" title="{Browser}" backgroundImage="globe">
+                                                    <color key="titleColor" red="0.016804177310000001" green="0.19835099580000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="WebBrowser:" destination="89x-Hb-n98" eventType="touchUpInside" id="edb-Dq-YuO"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Wt2-lW-vZs">
+                                                <rect key="frame" x="68" y="0.0" width="60" height="60"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" relation="lessThanOrEqual" constant="60" id="WqU-FB-dC7"/>
+                                                    <constraint firstAttribute="height" constant="60" id="biT-1Y-6vz"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" name="StarStrella" family="Star Strella" pointSize="10"/>
+                                                <inset key="titleEdgeInsets" minX="0.0" minY="56" maxX="0.0" maxY="0.0"/>
+                                                <state key="normal" title="{DragDrop}" backgroundImage="down">
+                                                    <color key="titleColor" red="0.016804177310000001" green="0.19835099580000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                </state>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="x1i-WY-DjV">
+                                                <rect key="frame" x="136" y="0.0" width="60" height="60"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" relation="lessThanOrEqual" constant="60" id="Hsa-LP-8Pr"/>
+                                                    <constraint firstAttribute="height" constant="60" id="v0a-BG-Oar"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" name="StarStrella" family="Star Strella" pointSize="11"/>
+                                                <inset key="titleEdgeInsets" minX="0.0" minY="56" maxX="0.0" maxY="0.0"/>
+                                                <inset key="imageEdgeInsets" minX="0.0" minY="8" maxX="0.0" maxY="0.0"/>
+                                                <state key="normal" title="{Camera}" backgroundImage="camera">
+                                                    <color key="titleColor" red="0.016804177310000001" green="0.19835099580000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="Camera:" destination="89x-Hb-n98" eventType="touchUpInside" id="Hvt-hd-6Fw"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="alN-3G-3Xl">
+                                                <rect key="frame" x="204" y="0.0" width="60" height="60"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" relation="lessThanOrEqual" constant="60" id="O07-zZ-9Nx"/>
+                                                    <constraint firstAttribute="height" constant="60" id="ycR-eD-nvy"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" name="StarStrella" family="Star Strella" pointSize="11"/>
+                                                <inset key="titleEdgeInsets" minX="0.0" minY="56" maxX="0.0" maxY="0.0"/>
+                                                <state key="normal" title="{Library}" backgroundImage="picture-1">
+                                                    <color key="titleColor" red="0.016804177310000001" green="0.19835099580000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="Library:" destination="89x-Hb-n98" eventType="touchUpInside" id="g9P-TU-oxr"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                    </stackView>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="68" id="5J6-3F-J8J"/>
-                                    <constraint firstItem="6b7-1o-tNs" firstAttribute="leading" secondItem="z5D-0U-KQ1" secondAttribute="leading" constant="16" id="5fE-Gm-L6f"/>
-                                    <constraint firstItem="x1i-WY-DjV" firstAttribute="top" secondItem="z5D-0U-KQ1" secondAttribute="top" id="FNE-fq-NJP"/>
-                                    <constraint firstItem="alN-3G-3Xl" firstAttribute="leading" secondItem="x1i-WY-DjV" secondAttribute="trailing" constant="8" id="K9f-B4-hRF"/>
-                                    <constraint firstAttribute="trailing" secondItem="alN-3G-3Xl" secondAttribute="trailing" constant="16" id="LEr-IX-UCk"/>
-                                    <constraint firstItem="Wt2-lW-vZs" firstAttribute="top" secondItem="z5D-0U-KQ1" secondAttribute="top" id="RYN-xZ-tKm"/>
-                                    <constraint firstItem="Wt2-lW-vZs" firstAttribute="leading" secondItem="6b7-1o-tNs" secondAttribute="trailing" constant="8" id="pJ7-xV-R2P"/>
-                                    <constraint firstItem="6b7-1o-tNs" firstAttribute="top" secondItem="z5D-0U-KQ1" secondAttribute="top" id="vha-7F-tSk"/>
-                                    <constraint firstItem="x1i-WY-DjV" firstAttribute="leading" relation="lessThanOrEqual" secondItem="Wt2-lW-vZs" secondAttribute="trailing" constant="3" id="wHy-Mz-B20"/>
-                                    <constraint firstItem="alN-3G-3Xl" firstAttribute="top" secondItem="z5D-0U-KQ1" secondAttribute="top" id="yeh-fn-A8S"/>
+                                    <constraint firstItem="Cdn-iZ-nUx" firstAttribute="leading" relation="lessThanOrEqual" secondItem="z5D-0U-KQ1" secondAttribute="leading" constant="14" id="8BD-JE-2JL"/>
+                                    <constraint firstItem="Cdn-iZ-nUx" firstAttribute="top" secondItem="z5D-0U-KQ1" secondAttribute="top" constant="4" id="qfE-Hg-YOz"/>
+                                    <constraint firstAttribute="trailing" relation="lessThanOrEqual" secondItem="Cdn-iZ-nUx" secondAttribute="trailing" constant="13" id="y4Z-Vk-GyI"/>
+                                    <constraint firstAttribute="bottom" secondItem="Cdn-iZ-nUx" secondAttribute="bottom" constant="4" id="y5F-vo-flK"/>
                                 </constraints>
                             </view>
                         </subviews>
@@ -150,6 +150,7 @@
                     <connections>
                         <outlet property="CameraButton" destination="x1i-WY-DjV" id="jna-dT-7fx"/>
                         <outlet property="challengeTextField" destination="FjV-AO-ThF" id="SYJ-Ib-Ddn"/>
+                        <outlet property="dragDrop" destination="Wt2-lW-vZs" id="aqH-Uz-j1o"/>
                         <outlet property="dropZone" destination="z5D-0U-KQ1" id="oYk-Gv-Ysg"/>
                         <outlet property="hintTextField" destination="QMz-gr-6IX" id="91G-CM-vW2"/>
                         <outlet property="nameTextField" destination="NPw-2x-d5g" id="XrF-qu-trc"/>
@@ -163,7 +164,7 @@
         <!--Web View Controller-->
         <scene sceneID="7Wl-Ur-jxq">
             <objects>
-                <viewController id="Jgq-3g-BUk" customClass="WebViewController" customModule="n2khide" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="Jgq-3g-BUk" customClass="WebViewController" customModule="n2k_Map" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="s2P-Uh-RIf">
                         <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -251,7 +252,7 @@
         <!--Image View Controller-->
         <scene sceneID="W0r-LP-Fxv">
             <objects>
-                <viewController id="afq-bh-0gB" customClass="ImageViewController" customModule="n2khide" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="afq-bh-0gB" customClass="ImageViewController" customModule="n2k_Map" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="k3m-Ii-HSv">
                         <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -287,7 +288,7 @@
         <!--Scanner View Controller-->
         <scene sceneID="jQP-q9-cgE">
             <objects>
-                <viewController id="D55-Yg-gKr" customClass="ScannerViewController" customModule="n2khide" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="D55-Yg-gKr" customClass="ScannerViewController" customModule="n2k_Map" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="AAw-vN-eJG">
                         <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -302,12 +303,12 @@
         <!--Hidding View Controller-->
         <scene sceneID="1MW-og-wL4">
             <objects>
-                <viewController id="17o-cH-NIh" customClass="HiddingViewController" customModule="n2khide" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="17o-cH-NIh" customClass="HiddingViewController" customModule="n2k_Map" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8n7-vd-joa">
                         <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ddt-Qx-MRh" customClass="HideView" customModule="n2khide" customModuleProvider="target">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ddt-Qx-MRh" customClass="HideView" customModule="n2k_Map" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="64" width="768" height="916"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SvD-CE-nLV">
@@ -586,7 +587,7 @@
         <!--Hide Table View Controller-->
         <scene sceneID="kai-ZV-4uV">
             <objects>
-                <tableViewController id="AtU-1N-T2Y" customClass="HideTableViewController" customModule="n2khide" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="AtU-1N-T2Y" customClass="HideTableViewController" customModule="n2k_Map" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="Vli-Hw-GnB">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -616,7 +617,7 @@
                                     </subviews>
                                 </tableViewCellContentView>
                             </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="wayPointCell" rowHeight="64" id="TVE-xE-ykZ" customClass="WayPointViewCell" customModule="n2khide" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="wayPointCell" rowHeight="64" id="TVE-xE-ykZ" customClass="WayPointViewCell" customModule="n2k_Map" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="72" width="320" height="64"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="TVE-xE-ykZ" id="fck-MV-V7r">
@@ -662,7 +663,7 @@
                                     <outlet property="nameLabel" destination="gWs-z2-ryU" id="tU0-K4-KKJ"/>
                                 </connections>
                             </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="zoneTableCell" id="vu6-jo-M47" customClass="ZoneTableViewCell" customModule="n2khide" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="zoneTableCell" id="vu6-jo-M47" customClass="ZoneTableViewCell" customModule="n2k_Map" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="136" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="vu6-jo-M47" id="LVD-Ko-2hc">
@@ -682,7 +683,7 @@
                                     <outlet property="zoneLabel" destination="85t-Uu-ahp" id="MSk-N9-H0D"/>
                                 </connections>
                             </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="searchViewCell" id="etg-Q5-XCV" customClass="SearchTableViewCell" customModule="n2khide" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="searchViewCell" id="etg-Q5-XCV" customClass="SearchTableViewCell" customModule="n2k_Map" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="180" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="etg-Q5-XCV" id="pU9-2e-8q3">
@@ -780,7 +781,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ASA-lh-Dip" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3130" y="639"/>
+            <point key="canvasLocation" x="2998" y="609"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="ytb-TA-NZm">
