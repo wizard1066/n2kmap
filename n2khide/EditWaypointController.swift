@@ -38,12 +38,32 @@ class EditWaypointController: UIViewController, UIDropInteractionDelegate, UIIma
 //        importMenu.delegate = self
 //        importMenu.addOption(withTitle: "Create New Document", image: nil, order: .first, handler: { print("New Doc Requested") })
 //        present(importMenu, animated: true, completion: nil)
-        let documentPicker = UIDocumentPickerViewController(documentTypes: [(kUTTypeText as NSString) as String], in: .import)
+        let documentPicker = UIDocumentPickerViewController(documentTypes: [(kUTTypeImage as NSString) as String], in: .import)
         documentPicker.delegate = self
         present(documentPicker, animated: true, completion: nil)
     }
     
-    @IBOutlet weak var dragDrop: UIButton!
+    // MARK:- UIDocumentPickerDelegate
+    func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentAt url: URL) {
+        getDataFromUrl(url: url) { data, response, error in
+            guard let data = data, error == nil else { return }
+            print(response?.suggestedFilename ?? url.lastPathComponent)
+            print("Download Finished")
+            DispatchQueue.main.async() {
+                self.setWayPoint.didSetImage(name: self.nameTextField.text, image: UIImage(data: data))
+            }
+        }
+    }
+    
+    func getDataFromUrl(url: URL, completion: @escaping (Data?, URLResponse?, Error?) -> ()) {
+        URLSession.shared.dataTask(with: url) { data, response, error in
+            completion(data, response, error)
+            }.resume()
+    }
+    
+    
+    
+
     @IBOutlet weak var CameraButton: UIButton! {
         didSet {
             CameraButton.isEnabled = UIImagePickerController.isSourceTypeAvailable(.camera)
@@ -104,7 +124,7 @@ class EditWaypointController: UIViewController, UIDropInteractionDelegate, UIIma
     override func viewDidLoad() {
         super.viewDidLoad()
         if UIDevice.current.userInterfaceIdiom == .phone {
-            dragDrop.alpha = 0.2
+            // not needed
         }
         nameTextField.text = nameText
         hintTextField.text = hintText
