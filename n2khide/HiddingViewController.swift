@@ -372,6 +372,13 @@ class HiddingViewController: UIViewController, UIDropInteractionDelegate, MKMapV
     
     func locationManager(_ manager: CLLocationManager, didRangeBeacons beacons: [CLBeacon], in region: CLBeaconRegion) {
 //        var closestBeacon: CLBeacon!
+        if usingMode == op.recording {
+            if beacons.count == 0 {
+                proximityLabel.isHidden = true
+            } else {
+                proximityLabel.isHidden = false
+            }
+        }
         
         if beacons.count > 0, usingMode == op.recording {
             let beacons2S = beacons.filter { $0.proximity != CLProximity.unknown }
@@ -2097,6 +2104,7 @@ func getShare() {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+
         self.locationManager?.requestAlwaysAuthorization()
         self.locationManager?.distanceFilter = kCLDistanceFilterNone
         self.locationManager?.desiredAccuracy = kCLLocationAccuracyBestForNavigation
@@ -2272,6 +2280,9 @@ func getShare() {
             print("error \(error.debugDescription)")
         })
         locationManager?.delegate = self
+        if globalUUID == nil {
+            proximityLabel.isHidden = true
+        }
 //        locationManager?.requestAlwaysAuthorization()
 //        locationManager?.distanceFilter = kCLDistanceFilterNone
 //        locationManager?.desiredAccuracy = kCLLocationAccuracyBestForNavigation

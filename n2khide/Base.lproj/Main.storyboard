@@ -153,7 +153,6 @@
                     <connections>
                         <outlet property="CameraButton" destination="x1i-WY-DjV" id="jna-dT-7fx"/>
                         <outlet property="challengeTextField" destination="FjV-AO-ThF" id="SYJ-Ib-Ddn"/>
-                        <outlet property="dragDrop" destination="Wt2-lW-vZs" id="aqH-Uz-j1o"/>
                         <outlet property="dropZone" destination="z5D-0U-KQ1" id="oYk-Gv-Ysg"/>
                         <outlet property="hintTextField" destination="QMz-gr-6IX" id="91G-CM-vW2"/>
                         <outlet property="nameTextField" destination="NPw-2x-d5g" id="XrF-qu-trc"/>
@@ -451,8 +450,8 @@
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="128" id="F01-AT-jpB"/>
                                                 </constraints>
-                                                <fontDescription key="fontDescription" name="AvenirNextCondensed-UltraLight" family="Avenir Next Condensed" pointSize="18"/>
-                                                <color key="textColor" red="1" green="0.14913141730000001" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <fontDescription key="fontDescription" name="AvenirNextCondensed-BoldItalic" family="Avenir Next Condensed" pointSize="18"/>
+                                                <color key="textColor" red="0.016804177310000001" green="0.19835099580000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                         </subviews>
