@@ -9,6 +9,7 @@
 import UIKit
 import MobileCoreServices
 
+
 protocol  setWayPoint  {
     func didSetName(originalName: String?, name: String?)
     func didSetHint(name: String?, hint: String?)
@@ -17,12 +18,30 @@ protocol  setWayPoint  {
     func didSetURL(name: String?, URL:String?)
 }
 
-class EditWaypointController: UIViewController, UIDropInteractionDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class EditWaypointController: UIViewController, UIDropInteractionDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIDocumentMenuDelegate, UIDocumentPickerDelegate {
+    
+    // MARK: Document Picker
+    func documentMenu(_ documentMenu: UIDocumentMenuViewController, didPickDocumentPicker documentPicker: UIDocumentPickerViewController) {
+        //code
+    }
+    
     
     var setWayPoint: setWayPoint!
     var me:HiddingViewController!
     
     //MARK: Camera and Library routines
+    
+    
+
+    @IBAction func dragDropButton(_ sender: Any) {
+//        let importMenu = UIDocumentMenuViewController(documentTypes: [(kUTTypeText as NSString) as String], in: .import)
+//        importMenu.delegate = self
+//        importMenu.addOption(withTitle: "Create New Document", image: nil, order: .first, handler: { print("New Doc Requested") })
+//        present(importMenu, animated: true, completion: nil)
+        let documentPicker = UIDocumentPickerViewController(documentTypes: [(kUTTypeText as NSString) as String], in: .import)
+        documentPicker.delegate = self
+        present(documentPicker, animated: true, completion: nil)
+    }
     
     @IBOutlet weak var dragDrop: UIButton!
     @IBOutlet weak var CameraButton: UIButton! {

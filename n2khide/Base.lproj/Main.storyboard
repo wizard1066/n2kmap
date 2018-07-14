@@ -86,6 +86,9 @@
                                                 <state key="normal" title="{DragDrop}" backgroundImage="down">
                                                     <color key="titleColor" red="0.016804177310000001" green="0.19835099580000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 </state>
+                                                <connections>
+                                                    <action selector="dragDropButton:" destination="89x-Hb-n98" eventType="touchUpInside" id="gjQ-H8-bO3"/>
+                                                </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="x1i-WY-DjV">
                                                 <rect key="frame" x="136" y="0.0" width="60" height="60"/>
