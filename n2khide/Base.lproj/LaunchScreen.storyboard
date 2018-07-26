@@ -18,14 +18,16 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Icon-256" translatesAutoresizingMaskIntoConstraints="NO" id="fhI-yR-30K">
-                                <rect key="frame" x="59" y="205.5" width="256" height="256"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="start" translatesAutoresizingMaskIntoConstraints="NO" id="fhI-yR-30K">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="fhI-yR-30K" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="25R-Vq-Usb"/>
-                            <constraint firstItem="fhI-yR-30K" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="ss3-An-hhf"/>
+                            <constraint firstItem="fhI-yR-30K" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="K2P-OA-Bfb"/>
+                            <constraint firstItem="fhI-yR-30K" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="PzK-TZ-yZb"/>
+                            <constraint firstItem="fhI-yR-30K" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="eNN-Z6-d4k"/>
+                            <constraint firstItem="fhI-yR-30K" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="u5Q-xl-8wo"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
@@ -36,6 +38,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="Icon-256" width="256" height="256"/>
+        <image name="start" width="1536" height="2048"/>
     </resources>
 </document>

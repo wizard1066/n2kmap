@@ -111,7 +111,7 @@ class HiddingViewController: UIViewController, UIDropInteractionDelegate, MKMapV
             undoLive()
             DispatchQueue.main.async() {
                 self.playButton.image = UIImage(named: "play")
-                self.playButton.tintColor = UIColor.blue
+                self.playButton.tintColor = self.buttonColour
             }
         }
         if !confirmSequenced() {
@@ -1225,7 +1225,6 @@ private func getSECoordinate(mRect: MKMapRect) -> CLLocationCoordinate2D {
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { [weak alert] (_) in
             let textField = alert?.textFields![0]
             if textField?.text != "" {
-//                let _ = self.listAllZones()
                 self.navigationItem.title = (textField?.text)!
                 if zoneTable[(textField?.text)!] != nil {
                     self.share2Load(zoneNamed: (textField?.text)!)
@@ -1238,7 +1237,7 @@ private func getSECoordinate(mRect: MKMapRect) -> CLLocationCoordinate2D {
                     self.saveZone(zone2S: recordZone)
                 }
             }
-            }))
+        }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .default,handler: nil))
         self.present(alert, animated: true, completion: nil)
     }
@@ -1253,7 +1252,7 @@ private func getSECoordinate(mRect: MKMapRect) -> CLLocationCoordinate2D {
             } else {
                 // Zone creation succeeded
                 recordZone = returnRecord
-
+                
                 self.doshare(rexShared: nil)
             }
         }))
@@ -1317,26 +1316,25 @@ private func getSECoordinate(mRect: MKMapRect) -> CLLocationCoordinate2D {
         }
         sharingApp = true
         savedMap = true
+        save2CloudV2(rex2S: rex2S, rex2D: rex2D, sharing: sharing, reordered: reordered)
+//        var dispatchDelay = 0
+//         if sharePoint == nil {
+//            dispatchDelay = 2
+//        }
+//        let when = DispatchTime.now() + Double(dispatchDelay)
+//        DispatchQueue.main.asyncAfter(deadline: when){
+//            if self.sharePoint == nil {
+//                            return
+//            }
+//
+//        self.operationQueue.maxConcurrentOperationCount = 1
+//        self.operationQueue.waitUntilAllOperationsAreFinished()
         
-        
-        
-         if sharePoint == nil {
+//        }
+    }
+    
+        func save2CloudV2(rex2S:[wayPoint]?, rex2D:[CKRecordID]?, sharing: Bool, reordered: Bool) {
             DispatchQueue.main.async {
-                let alert = UIAlertController(title: "Network Slow", message: "Try again in a minute or two", preferredStyle: UIAlertControllerStyle.alert)
-                alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
-                self.present(alert, animated: true, completion: nil)
-            }
-            return
-        }
-        
-//        let documentsDirectoryURL = try! FileManager().url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
-//        print("fcuk11072018 rex2S \(rex2S!)")
-
-        operationQueue.maxConcurrentOperationCount = 1
-        operationQueue.waitUntilAllOperationsAreFinished()
-        
-// Do something here with saves, reread zone and make sure you're not saving a duplicate record!!
-//        var p2S = readinrecords ?? 0
         var p2S = 0
         
         for point2Save in rex2S! {
@@ -1361,7 +1359,7 @@ private func getSECoordinate(mRect: MKMapRect) -> CLLocationCoordinate2D {
                 } else {
                     ckWayPointRecord.setObject(p2S as CKRecordValue?, forKey: Constants.Attribute.order)
                 }
-                ckWayPointRecord.setParent(sharePoint)
+                ckWayPointRecord.setParent(self.sharePoint)
                 p2S += 1
             
             var image2D: Data!
@@ -1372,7 +1370,6 @@ private func getSECoordinate(mRect: MKMapRect) -> CLLocationCoordinate2D {
                 image2D = UIImageJPEGRepresentation(UIImage(named: "noun_1348715_cc")!, 1.0)
             }
             if let _ = point2Save.name {
-//                let file2ShareURL = documentsDirectoryURL.appendingPathComponent(point2Save.name!)
                 let file2ShareURL = NSURL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(NSUUID().uuidString+".dat")
                 do {
                     try image2D?.write(to: file2ShareURL!, options: .atomicWrite)
@@ -1387,7 +1384,7 @@ private func getSECoordinate(mRect: MKMapRect) -> CLLocationCoordinate2D {
         }
         
         let modifyOp = CKModifyRecordsOperation(recordsToSave:
-            records2Share, recordIDsToDelete: rex2D)
+            self.records2Share, recordIDsToDelete: rex2D)
         modifyOp.savePolicy = .allKeys
         modifyOp.perRecordCompletionBlock = {(record,error) in
             print("error \(error.debugDescription)")
@@ -1410,6 +1407,7 @@ private func getSECoordinate(mRect: MKMapRect) -> CLLocationCoordinate2D {
             }
         }
         self.privateDB.add(modifyOp)
+    }
     }
         
         // new code added for parent setup 2nd try
@@ -1447,6 +1445,7 @@ private func getSECoordinate(mRect: MKMapRect) -> CLLocationCoordinate2D {
                     print("error \(error.debugDescription)")
                 }
 //                self.sharing(record2S: self.sharePoint)
+                self.save2CloudV2(rex2S: listOfPoint2Seek, rex2D: nil, sharing: false, reordered: false)
             }
             self.privateDB.add(modifyOp)
         }
@@ -2310,10 +2309,12 @@ func fetchShare() {
             center.removeObserver(regionObserver)
         }
     }
+    
+    var buttonColour: UIColor!
 
     override func viewDidLoad() {
         super.viewDidLoad()
-      
+        buttonColour = playButton.tintColor
         cleanup()
         trigger = point.gps
         centerImage.alpha = 0.5
