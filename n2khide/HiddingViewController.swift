@@ -96,7 +96,24 @@ class HiddingViewController: UIViewController, UIDropInteractionDelegate, MKMapV
     private var savedMap: Bool = true
     @IBOutlet weak var proximityLabel: UILabel!
     
+    @IBOutlet weak var playButton: UIBarButtonItem!
     @IBAction func saveButton(_ sender: Any) {
+        tryNow = !tryNow
+        if tryNow {
+            doLive()
+            DispatchQueue.main.async() {
+                self.playButton.image = UIImage(named: "rec")
+                self.playButton.tintColor = UIColor.red
+            }
+            return
+        }
+        if !tryNow {
+            undoLive()
+            DispatchQueue.main.async() {
+                self.playButton.image = UIImage(named: "play")
+                self.playButton.tintColor = UIColor.blue
+            }
+        }
         if !confirmSequenced() {
             return
         }
@@ -105,6 +122,7 @@ class HiddingViewController: UIViewController, UIDropInteractionDelegate, MKMapV
             self.spinner.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.gray
             self.view.addSubview(self.spinner)
             self.spinner.startAnimating()
+            UIApplication.shared.isNetworkActivityIndicatorVisible = true
         }
         save2Cloud(rex2S: listOfPoint2Seek, rex2D: nil, sharing: false, reordered: false)
     }
@@ -1292,6 +1310,7 @@ private func getSECoordinate(mRect: MKMapRect) -> CLLocationCoordinate2D {
                 if self.spinner != nil {
                     self.spinner.stopAnimating()
                     self.spinner.removeFromSuperview()
+                    UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 }
             }
             return
@@ -1382,6 +1401,7 @@ private func getSECoordinate(mRect: MKMapRect) -> CLLocationCoordinate2D {
                 if self.spinner != nil {
                     self.spinner.stopAnimating()
                     self.spinner.removeFromSuperview()
+                    UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 }
             }
             if sharing {
@@ -1478,20 +1498,60 @@ private func getSECoordinate(mRect: MKMapRect) -> CLLocationCoordinate2D {
                 }
         }
     
-        
-    @IBAction func FetchShare(_ sender: Any) {
+    func undoLive() {
+        pin.isEnabled = true
+        scanButton.isEnabled = true
+        plusButton.isEnabled = true
+        usingMode  = op.recording
+    }
+    
+    func doLive() {
         windowView = .playing
         pin.isEnabled = false
         scanButton.isEnabled = false
         plusButton.isEnabled = false
-        getShare()
+        getShare(mode2D: false)
+        for rex in listOfPoint2Seek {
+            let rex2D = wp2Search(name: rex.name, find: nil, bon: false)
+            listOfPoint2Search.append(rex2D)
+            let boxes = rex.boxes
+            DispatchQueue.main.async {
+                if boxes != nil {
+                    for _ in boxes! {
+                        let wp2FLat = self.getLocationDegreesFrom(latitude:(rex.coordinates?.latitude)!)
+                        let wp2FLog = self.getLocationDegreesFrom(longitude: (rex.coordinates?.longitude)!)
+                        WP2M[wp2FLat+wp2FLog] = rex.name
+                    }
+                }
+            }
+        }
         codeRunState = gameplay.playing
-        resetTitles()
+       
+        self.topView.bringSubview(toFront: self.lowLabel)
+        self.topView.bringSubview(toFront: self.highLabel)
+        let when = DispatchTime.now() + Double(0)
+        usingMode = op.playing
+        DispatchQueue.main.asyncAfter(deadline: when){
+            self.runMode()
+        }
+    }
+        
+func fetchShare() {
+        windowView = .playing
+        pin.isEnabled = false
+        scanButton.isEnabled = false
+        plusButton.isEnabled = false
+        getShare(mode2D: true)
+        codeRunState = gameplay.playing
+//        resetTitles()
         self.topView.bringSubview(toFront: self.lowLabel)
         self.topView.bringSubview(toFront: self.highLabel)
     }
     
     @IBAction func saveB(_ sender: Any) {
+        if usingMode == op.recording, listOfPoint2Seek.count > 0 {
+            doLive()
+        }
         saveImage()
     }
     
@@ -1509,29 +1569,30 @@ private func getSECoordinate(mRect: MKMapRect) -> CLLocationCoordinate2D {
     var nextLocation: CLLocationCoordinate2D!
     var angle2U: Double? = nil
     
-func getShare() {
+    func getShare(mode2D: Bool) {
         usingMode = op.playing
-//        windowView = .points
         mapView.alpha = 0.7
-        listOfPoint2Seek = []
-        listOfPoint2Search = []
         centerImage.image = UIImage(named: "compassClip")
-    if currentZone == nil {
-        let alert = UIAlertController(title: "Map Name", message: "", preferredStyle: .alert)
-        alert.addTextField { (textField) in
-            textField.placeholder = "Map Name"
-        }
-        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { [weak alert] (_) in
-            let textField = alert?.textFields![0]
-            if textField?.text != "" {
-                self.navigationItem.title = textField?.text
-                self.share2Load(zoneNamed: (textField?.text)!)
-                self.zoneRecord2Load(zoneNamed: (textField?.text)!)
+        if mode2D {
+            listOfPoint2Seek = []
+            listOfPoint2Search = []
+            if currentZone == nil {
+                let alert = UIAlertController(title: "Map Name", message: "", preferredStyle: .alert)
+                alert.addTextField { (textField) in
+                    textField.placeholder = "Map Name"
+                }
+                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { [weak alert] (_) in
+                    let textField = alert?.textFields![0]
+                    if textField?.text != "" {
+                        self.navigationItem.title = textField?.text
+                        self.share2Load(zoneNamed: (textField?.text)!)
+                        self.zoneRecord2Load(zoneNamed: (textField?.text)!)
+                    }
+                }))
+                alert.addAction(UIAlertAction(title: "Cancel", style: .default,handler: nil))
+                self.present(alert, animated: true, completion: nil)
             }
-        }))
-        alert.addAction(UIAlertAction(title: "Cancel", style: .default,handler: nil))
-        self.present(alert, animated: true, completion: nil)
-    }
+        }
     }
     
     func share2Source(zoneID: CKRecordZoneID?) {
@@ -1549,6 +1610,7 @@ func getShare() {
             self.spinner.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.gray
             self.view.addSubview(self.spinner)
             self.spinner.startAnimating()
+            UIApplication.shared.isNetworkActivityIndicatorVisible = true
         }
         let query = CKQuery(recordType: "Waypoints", predicate: predicate)
         query.sortDescriptors = [NSSortDescriptor(key: "order", ascending: true)]
@@ -1573,6 +1635,7 @@ func getShare() {
                         self.timerLabel.isHidden = false
                         self.countLabel.isHidden = false
                         self.spinner.removeFromSuperview()
+                        UIApplication.shared.isNetworkActivityIndicatorVisible = false
                     }
                 }
             }
@@ -1625,43 +1688,27 @@ func getShare() {
                 if self.spinner != nil {
                     self.spinner.stopAnimating()
                     self.spinner.removeFromSuperview()
+                    UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 }
             }
             
             let when = DispatchTime.now() + Double(4)
             DispatchQueue.main.asyncAfter(deadline: when){
-                if usingMode == op.playing {
-                    
-                    self.countLabel.text  = String(listOfPoint2Seek.count)
-                    self.lowLabel.isHidden = false
-                    self.highLabel.isHidden = false
-                    self.nextLocation2Show()
-                    self.makeTimer()
-                    self.timerLabel.isHidden = false
-                    self.countLabel.isHidden = false
-                }
+                self.runMode()
             }
         }
-        
+    }
     
-//    let when = DispatchTime.now() + Double(4)
-//    DispatchQueue.main.asyncAfter(deadline: when){
-//            self.countLabel.text  = String(listOfPoint2Seek.count)
-//
-//        self.lowLabel.isHidden = false
-//        self.highLabel.isHidden = false
-//        self.nextLocation2Show()
-//    }
-    
-        
-    
-    
-//        let predicate = NSPredicate(format: "owningList == %@", recordID)
-//        let query = CKQuery(recordType: "Waypoints", predicate: predicate)
-//
-//        shareDB.perform(query, inZoneWith: recordZoneID) { (records, error) in
-//            print("mine record \(records.debugDescription) and error \(error.debugDescription)")
-//        }
+    func runMode() {
+        if usingMode == op.playing {
+            self.countLabel.text  = String(listOfPoint2Seek.count)
+            self.lowLabel.isHidden = false
+            self.highLabel.isHidden = false
+            self.nextLocation2Show()
+            self.makeTimer()
+            self.timerLabel.isHidden = false
+            self.countLabel.isHidden = false
+        }
     }
     
     private func fetchParentX(recordID: CKRecordID)  {
@@ -1857,6 +1904,7 @@ func getShare() {
 }
     
     @IBAction func ShareButton2(_ sender: UIBarButtonItem) {
+
         if !confirmSequenced() {
             return
         }
@@ -1865,6 +1913,7 @@ func getShare() {
             self.spinner.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.gray
             self.view.addSubview(self.spinner)
             self.spinner.startAnimating()
+            UIApplication.shared.isNetworkActivityIndicatorVisible = true
         }
         save2Cloud(rex2S: listOfPoint2Seek, rex2D: nil, sharing: true, reordered: false)
         

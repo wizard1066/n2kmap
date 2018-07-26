@@ -94,6 +94,7 @@ struct way2G: Codable
 var beaconRegion:CLBeaconRegion!
 var currentZone: CKRecordZone!
 var currentWayPoint: wayPoint!
+var tryNow: Bool = false
 
 
 

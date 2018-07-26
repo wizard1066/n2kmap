@@ -536,7 +536,7 @@
                                     <action selector="ShareButton2:" destination="17o-cH-NIh" id="0Vk-FL-SrB"/>
                                 </connections>
                             </barButtonItem>
-                            <barButtonItem systemItem="save" id="Avn-NY-Ja6">
+                            <barButtonItem title="Item" image="play" id="Avn-NY-Ja6">
                                 <connections>
                                     <action selector="saveButton:" destination="17o-cH-NIh" id="dvc-0f-BaM"/>
                                 </connections>
@@ -566,6 +566,7 @@
                         <outlet property="nameLabel" destination="H9l-Jh-LRi" id="cBp-Pw-diZ"/>
                         <outlet property="orderLabel" destination="2KP-uV-ovL" id="7o9-Ns-616"/>
                         <outlet property="pin" destination="5rp-DO-9vb" id="qgw-05-E2y"/>
+                        <outlet property="playButton" destination="Avn-NY-Ja6" id="MeD-7h-cMG"/>
                         <outlet property="plusButton" destination="7Tj-8q-gGU" id="wUA-mb-34e"/>
                         <outlet property="proximityLabel" destination="FOH-tJ-Mty" id="VdB-fa-eYD"/>
                         <outlet property="scanButton" destination="gau-6O-lj9" id="fs9-QC-2y5"/>
@@ -831,6 +832,7 @@
         <image name="noun_Next_538847" width="700" height="700"/>
         <image name="noun_back_542006" width="700" height="700"/>
         <image name="picture-1" width="165" height="165"/>
+        <image name="play" width="30" height="30"/>
         <image name="qr_code" width="30" height="30"/>
     </resources>
     <inferredMetricsTieBreakers>
