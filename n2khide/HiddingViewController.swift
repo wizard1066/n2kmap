@@ -12,9 +12,7 @@ import CloudKit
 import CoreLocation
 import SafariServices
 
-// 2F234454-CF6D-4A0F-ADF2-F4911BA9FFA6 UUID
-
-
+// 2F234454-CF6D-4A0F-ADF2-F4911BA9FFA6 UUID iBeacon
 
 extension UIImage {
     func resize(width: CGFloat) -> UIImage {
@@ -409,7 +407,7 @@ class HiddingViewController: UIViewController, UIDropInteractionDelegate, MKMapV
 
                             let uniqueName = "UUID" + "-" + cMinorMajorKey
                             beaconsLogged.append(uniqueName)
-                            let newWayPoint = wayPoint(recordID:nil, UUID: globalUUID, major:closestBeacon.major as? Int, minor: closestBeacon.minor as? Int, proximity: nil, coordinates: nil, name: uniqueName, hint:nil, image: nil, order: listOfPoint2Seek.count, boxes: nil, challenge: nil,  URL: nil)
+                            let newWayPoint = wayPoint(recordID:nil, UUID: globalUUID, major:closestBeacon.major as? Int, minor: closestBeacon.minor as? Int, proximity: closestBeacon.proximity, coordinates: nil, name: uniqueName, hint:nil, image: nil, order: listOfPoint2Seek.count, boxes: nil, challenge: nil,  URL: nil)
                             wayPoints[cMinorMajorKey] = newWayPoint
                            
                             listOfPoint2Seek.append(newWayPoint)
@@ -440,6 +438,7 @@ class HiddingViewController: UIViewController, UIDropInteractionDelegate, MKMapV
                                     self.nextLocation2Show()
                                 }
                             } else {
+                               
                                 if presentedViewController?.contents != ImageViewController() {
                                     performSegue(withIdentifier: Constants.ShowImageSegue, sender: view)
                                     self.orderLabel.text = String(order2Search!)
@@ -640,6 +639,7 @@ class HiddingViewController: UIViewController, UIDropInteractionDelegate, MKMapV
                                 self.nextLocation2Show()
                             }
                         } else {
+                           
                             if self.presentedViewController?.contents != ImageViewController() {
                                 print("present")
                                 self.performSegue(withIdentifier: Constants.ShowImageSegue, sender: self.view)
@@ -1753,7 +1753,7 @@ func fetchShare() {
             let name = record2U.object(forKey:  Constants.Attribute.name) as? String
             let hint = record2U.object(forKey:  Constants.Attribute.hint) as? String
             let order = record2U.object(forKey:  Constants.Attribute.order) as? Int
-        
+            let proximity = record2U.object(forKey: Constants.Attribute.proximity) as? CLProximity
             let boxes = record2U.object(forKey: Constants.Attribute.boxes) as? [CLLocation]
             let challenge = record2U.object(forKey: Constants.Attribute.challenge) as? String
             let file : CKAsset? = record2U.object(forKey: Constants.Attribute.imageData) as? CKAsset
@@ -1773,7 +1773,7 @@ func fetchShare() {
             } else {
                 let k2U = String(minor!) + String(major!)
                  if spotDuplicateError![k2U] == nil {
-                    let wp2S = wayPoint(recordID: record2U.recordID,UUID: globalUUID, major:major, minor: minor, proximity: nil, coordinates: nil, name: name, hint: hint, image: image2D, order: order, boxes: nil, challenge: challenge, URL: url2U)
+                    let wp2S = wayPoint(recordID: record2U.recordID,UUID: globalUUID, major:major, minor: minor, proximity: proximity, coordinates: nil, name: name, hint: hint, image: image2D, order: order, boxes: nil, challenge: challenge, URL: url2U)
                     listOfPoint2Seek.append(wp2S)
                     // set this just in case you want to define more ibeacons
                    

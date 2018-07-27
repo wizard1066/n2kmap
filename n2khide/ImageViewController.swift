@@ -8,7 +8,21 @@
 
 import UIKit
 
-class ImageViewController: UIViewController {
+class ImageViewController: UIViewController, UIViewControllerAnimatedTransitioning {
+    
+    func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
+        return 0.5
+    }
+    
+    func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
+        let toViewController = transitionContext.viewController(forKey: UITransitionContextViewControllerKey.to)
+        let containerView = transitionContext.containerView
+        let animationDuration = transitionDuration(using: transitionContext)
+        
+        containerView.addSubview((toViewController?.view)!)
+        
+    }
+    
 
     var image2S: UIImage!
     var challenge2A: String?

@@ -218,7 +218,7 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
                 self.major2U = UInt16(Int((major!.text)!)!)
                 self.minor2U = UInt16(Int((minor!.text)!)!)
                 print("start Beacon")
-                let uuid2G = UUID(uuidString:(self.firstViewController?.globalUUID!)!)
+                let uuid2G = UUID(uuidString:(self.code2D)!)
                 if uuid2G != nil {
                     self.peripheralManager.stopAdvertising()
                     self.beaconRegion = CLBeaconRegion(proximityUUID: uuid2G!, major: self.major2U, minor: self.minor2U, identifier: "broadcast")
