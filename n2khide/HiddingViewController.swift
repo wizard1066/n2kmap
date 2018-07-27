@@ -1520,6 +1520,7 @@ private func getSECoordinate(mRect: MKMapRect) -> CLLocationCoordinate2D {
         for rex in listOfPoint2Seek {
             let rex2D = wp2Search(name: rex.name, find: nil, bon: false)
             listOfPoint2Search.append(rex2D)
+
             let boxes = rex.boxes
             DispatchQueue.main.async {
                 if boxes != nil {
@@ -1528,6 +1529,11 @@ private func getSECoordinate(mRect: MKMapRect) -> CLLocationCoordinate2D {
                         let wp2FLog = self.getLocationDegreesFrom(longitude: (rex.coordinates?.longitude)!)
                         WP2M[wp2FLat+wp2FLog] = rex.name
                     }
+                }
+                if rex.major != nil, rex.minor != nil {
+                    let k2U = String(rex.minor!) + String(rex.major!)
+                    self.beaconsInTheBag[k2U] = true
+                    WP2M[k2U] = rex.name
                 }
             }
         }
