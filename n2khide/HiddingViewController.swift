@@ -425,25 +425,28 @@ class HiddingViewController: UIViewController, UIDropInteractionDelegate, MKMapV
                         let k2U = closestBeacon.minor.stringValue + closestBeacon.major.stringValue
                         let  alert2Post = WP2M[k2U]
                         // look for a specific/next ibeacon
+                       
                         if alert2Post == nextWP2S.name {
-                            WP2M[k2U] = nil
-                            updatePoint2Search(name2S: nextWP2S.name!)
-                            if nextWP2S.URL != nil {
-                                if presentedViewController?.contents != WebViewController() {
-                                    let url = URL(string: nextWP2S.URL! )
-                                    let svc = SFSafariViewController(url: url!)
-                                    present(svc, animated: true, completion: nil)
-                                    self.orderLabel.text = String(order2Search!)
-                                    self.judgement()
-                                    self.nextLocation2Show()
-                                }
-                            } else {
-                               
-                                if presentedViewController?.contents != ImageViewController() {
-                                    performSegue(withIdentifier: Constants.ShowImageSegue, sender: view)
-                                    self.orderLabel.text = String(order2Search!)
-                                    self.judgement()
-                                    self.nextLocation2Show()
+                            if closestBeacon.proximity  == nextWP2S.proximity {
+                                WP2M[k2U] = nil
+                                updatePoint2Search(name2S: nextWP2S.name!)
+                                if nextWP2S.URL != nil {
+                                    if presentedViewController?.contents != WebViewController() {
+                                        let url = URL(string: nextWP2S.URL! )
+                                        let svc = SFSafariViewController(url: url!)
+                                        present(svc, animated: true, completion: nil)
+                                        self.orderLabel.text = String(order2Search!)
+                                        self.judgement()
+                                        self.nextLocation2Show()
+                                    }
+                                } else {
+                                    
+                                    if presentedViewController?.contents != ImageViewController() {
+                                        performSegue(withIdentifier: Constants.ShowImageSegue, sender: view)
+                                        self.orderLabel.text = String(order2Search!)
+                                        self.judgement()
+                                        self.nextLocation2Show()
+                                    }
                                 }
                             }
                         } else {
