@@ -1302,7 +1302,7 @@ private func getSECoordinate(mRect: MKMapRect) -> CLLocationCoordinate2D {
 //    }
     
     func save2Cloud(rex2S:[wayPoint]?, rex2D:[CKRecordID]?, sharing: Bool, reordered: Bool) {
-       
+        
         if recordZone == nil {
             nouveauMap(source: false)
             DispatchQueue.main.async() {
@@ -1316,34 +1316,34 @@ private func getSECoordinate(mRect: MKMapRect) -> CLLocationCoordinate2D {
         }
         sharingApp = true
         savedMap = true
-        save2CloudV2(rex2S: rex2S, rex2D: rex2D, sharing: sharing, reordered: reordered)
-//        var dispatchDelay = 0
-//         if sharePoint == nil {
-//            dispatchDelay = 2
-//        }
-//        let when = DispatchTime.now() + Double(dispatchDelay)
-//        DispatchQueue.main.asyncAfter(deadline: when){
-//            if self.sharePoint == nil {
-//                            return
-//            }
-//
-//        self.operationQueue.maxConcurrentOperationCount = 1
-//        self.operationQueue.waitUntilAllOperationsAreFinished()
+        listOfPoint2Seek = save2CloudV2(rex2S: rex2S, rex2D: rex2D, sharing: sharing, reordered: reordered)
+        //        var dispatchDelay = 0
+        //         if sharePoint == nil {
+        //            dispatchDelay = 2
+        //        }
+        //        let when = DispatchTime.now() + Double(dispatchDelay)
+        //        DispatchQueue.main.asyncAfter(deadline: when){
+        //            if self.sharePoint == nil {
+        //                            return
+        //            }
+        //
+        //        self.operationQueue.maxConcurrentOperationCount = 1
+        //        self.operationQueue.waitUntilAllOperationsAreFinished()
         
-//        }
+        //        }
     }
     
-        func save2CloudV2(rex2S:[wayPoint]?, rex2D:[CKRecordID]?, sharing: Bool, reordered: Bool) {
-            DispatchQueue.main.async {
-        var p2S = 0
-        
-        for point2Save in rex2S! {
-            var ckWayPointRecord: CKRecord!
-            if point2Save.recordID == nil {
+    func save2CloudV2(rex2S:[wayPoint]?, rex2D:[CKRecordID]?, sharing: Bool, reordered: Bool) -> [wayPoint] {
+        var listOfWayPointsSaved:[wayPoint] = []
+        DispatchQueue.main.async {
+            var p2S = 0
+            for point2Save in rex2S! {
+                var ckWayPointRecord: CKRecord!
+                if point2Save.recordID == nil {
                     ckWayPointRecord = CKRecord(recordType: Constants.Entity.wayPoints, zoneID: recordZone.zoneID)
-            } else {
-                ckWayPointRecord = CKRecord(recordType: Constants.Entity.wayPoints, recordID: point2Save.recordID!)
-            }
+                } else {
+                    ckWayPointRecord = CKRecord(recordType: Constants.Entity.wayPoints, recordID: point2Save.recordID!)
+                }
                 ckWayPointRecord.setObject(point2Save.coordinates?.longitude as CKRecordValue?, forKey: Constants.Attribute.longitude)
                 ckWayPointRecord.setObject(point2Save.coordinates?.latitude as CKRecordValue?, forKey: Constants.Attribute.latitude)
                 ckWayPointRecord.setObject(point2Save.name as CKRecordValue?, forKey: Constants.Attribute.name)
@@ -1361,53 +1361,60 @@ private func getSECoordinate(mRect: MKMapRect) -> CLLocationCoordinate2D {
                 }
                 ckWayPointRecord.setParent(self.sharePoint)
                 p2S += 1
-            
-            var image2D: Data!
-            if point2Save.image != nil {
-                 let newImage = point2Save.image?.resize(size: CGSize(width: 1080, height: 1920))
-                image2D = UIImageJPEGRepresentation(newImage!, 1.0)
-            } else {
-                image2D = UIImageJPEGRepresentation(UIImage(named: "noun_1348715_cc")!, 1.0)
-            }
-            if let _ = point2Save.name {
-                let file2ShareURL = NSURL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(NSUUID().uuidString+".dat")
-                do {
-                    try image2D?.write(to: file2ShareURL!, options: .atomicWrite)
-                    let newAsset = CKAsset(fileURL: file2ShareURL!)
-                    ckWayPointRecord.setObject(newAsset as CKAsset?, forKey: Constants.Attribute.imageData)
-                    self.records2Share.append(ckWayPointRecord)
-                } catch let e as NSError {
-                    print("Error! \(e)");
-                    return
+                
+//                var rex2U = listOfWayPointsSaved.filter { $0.name == point2Save.name }.first
+//                rex2U?.recordID = ckWayPointRecord.recordID
+                
+                let newWP  = wayPoint(recordID: point2Save.recordID, UUID: point2Save.UUID, major: point2Save.major, minor: point2Save.minor, proximity: point2Save.proximity, coordinates: point2Save.coordinates, name: point2Save.name, hint: point2Save.hint, image: point2Save.image, order: point2Save.order, boxes: point2Save.boxes, challenge: point2Save.challenge, URL: point2Save.URL)
+                listOfWayPointsSaved.append(newWP)
+                
+                var image2D: Data!
+                if point2Save.image != nil {
+                    let newImage = point2Save.image?.resize(size: CGSize(width: 1080, height: 1920))
+                    image2D = UIImageJPEGRepresentation(newImage!, 1.0)
+                } else {
+                    image2D = UIImageJPEGRepresentation(UIImage(named: "noun_1348715_cc")!, 1.0)
                 }
-           }
-        }
-        
-        let modifyOp = CKModifyRecordsOperation(recordsToSave:
-            self.records2Share, recordIDsToDelete: rex2D)
-        modifyOp.savePolicy = .allKeys
-        modifyOp.perRecordCompletionBlock = {(record,error) in
-            print("error \(error.debugDescription)")
-        }
-        modifyOp.modifyRecordsCompletionBlock = { (record, recordID,
-            error) in
-            if error != nil {
+                if let _ = point2Save.name {
+                    let file2ShareURL = NSURL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(NSUUID().uuidString+".dat")
+                    do {
+                        try image2D?.write(to: file2ShareURL!, options: .atomicWrite)
+                        let newAsset = CKAsset(fileURL: file2ShareURL!)
+                        ckWayPointRecord.setObject(newAsset as CKAsset?, forKey: Constants.Attribute.imageData)
+                        self.records2Share.append(ckWayPointRecord)
+                    } catch let e as NSError {
+                        print("Error! \(e)");
+                        return
+                    }
+                }
+            }
+            
+            let modifyOp = CKModifyRecordsOperation(recordsToSave:
+                self.records2Share, recordIDsToDelete: rex2D)
+            modifyOp.savePolicy = .allKeys
+            modifyOp.perRecordCompletionBlock = {(record,error) in
                 print("error \(error.debugDescription)")
             }
-            DispatchQueue.main.async() {
-                if self.spinner != nil {
-                    self.spinner.stopAnimating()
-                    self.spinner.removeFromSuperview()
-                    UIApplication.shared.isNetworkActivityIndicatorVisible = false
+            modifyOp.modifyRecordsCompletionBlock = { (record, recordID,
+                error) in
+                if error != nil {
+                    print("error \(error.debugDescription)")
+                }
+                DispatchQueue.main.async() {
+                    if self.spinner != nil {
+                        self.spinner.stopAnimating()
+                        self.spinner.removeFromSuperview()
+                        UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                    }
+                }
+                if sharing {
+                    self.sharing(record2S: self.sharePoint!)
+                    order2Search = listOfPoint2Seek.count
                 }
             }
-            if sharing {
-                self.sharing(record2S: self.sharePoint!)
-                order2Search = listOfPoint2Seek.count
-            }
+            self.privateDB.add(modifyOp)
         }
-        self.privateDB.add(modifyOp)
-    }
+        return listOfWayPointsSaved
     }
         
         // new code added for parent setup 2nd try
@@ -1445,7 +1452,7 @@ private func getSECoordinate(mRect: MKMapRect) -> CLLocationCoordinate2D {
                     print("error \(error.debugDescription)")
                 }
 //                self.sharing(record2S: self.sharePoint)
-                self.save2CloudV2(rex2S: listOfPoint2Seek, rex2D: nil, sharing: false, reordered: false)
+                listOfPoint2Seek = self.save2CloudV2(rex2S: listOfPoint2Seek, rex2D: nil, sharing: false, reordered: false)
             }
             self.privateDB.add(modifyOp)
         }
@@ -2163,11 +2170,13 @@ func fetchShare() {
         self.startScanning()
         let when = DispatchTime.now() + Double(8)
         DispatchQueue.main.asyncAfter(deadline: when){
-            let span: MKCoordinateSpan = MKCoordinateSpanMake(0.01, 0.01)
-            let userLocation: CLLocationCoordinate2D = CLLocationCoordinate2DMake(self.currentLocation!.coordinate.latitude, self.currentLocation!.coordinate.longitude)
-            let region: MKCoordinateRegion = MKCoordinateRegionMake(userLocation, span)
-            self.mapView.setRegion(region, animated: true)
-            self.regionHasBeenCentered = true
+            if self.currentLocation != nil {
+                let span: MKCoordinateSpan = MKCoordinateSpanMake(0.01, 0.01)
+                let userLocation: CLLocationCoordinate2D = CLLocationCoordinate2DMake(self.currentLocation!.coordinate.latitude, self.currentLocation!.coordinate.longitude)
+                let region: MKCoordinateRegion = MKCoordinateRegionMake(userLocation, span)
+                self.mapView.setRegion(region, animated: true)
+                self.regionHasBeenCentered = true
+            }
         }
 
         let center = NotificationCenter.default

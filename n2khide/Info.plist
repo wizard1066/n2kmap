@@ -44,7 +44,7 @@
 	<key>NSCameraUsageDescription</key>
 	<string>Needed if you want to take snaps for your maphunt</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>n2khide requires access to your devices's location to notify you when you find a hidden pin.</string>
+	<string>n2khide requires access to your devices&apos;s location to notify you when you find a hidden pin.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>n2khide is currently monitoring your location.</string>
 	<key>UIAppFonts</key>
@@ -66,6 +66,7 @@
 	</array>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
+		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 		<string>UIInterfaceOrientationPortrait</string>
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
