@@ -11,7 +11,7 @@ import UIKit
 class ImageViewController: UIViewController, UIViewControllerAnimatedTransitioning {
     
     func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
-        return 0.5
+        return 8.0
     }
     
     func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
