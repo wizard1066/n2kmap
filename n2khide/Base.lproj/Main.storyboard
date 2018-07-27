@@ -27,7 +27,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Name" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="NPw-2x-d5g">
-                                <rect key="frame" x="14.5" y="16" width="291" height="30"/>
+                                <rect key="frame" x="14.5" y="22" width="291" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="pqj-Q9-bXb"/>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="291" id="wzh-jU-XUf"/>
@@ -37,7 +37,7 @@
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Hint" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="QMz-gr-6IX">
-                                <rect key="frame" x="14.5" y="54" width="291" height="30"/>
+                                <rect key="frame" x="14.5" y="60" width="291" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="TU1-JK-Lfd"/>
                                 </constraints>
@@ -46,7 +46,7 @@
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Challenge" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="FjV-AO-ThF">
-                                <rect key="frame" x="14.5" y="92" width="291" height="30"/>
+                                <rect key="frame" x="14.5" y="98" width="291" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="tq4-gN-2mM"/>
                                 </constraints>
@@ -55,7 +55,7 @@
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="z5D-0U-KQ1">
-                                <rect key="frame" x="14.5" y="130" width="291" height="68"/>
+                                <rect key="frame" x="14.5" y="136" width="291" height="68"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="Cdn-iZ-nUx">
                                         <rect key="frame" x="14" y="4" width="264" height="60"/>
@@ -133,17 +133,23 @@
                                     <constraint firstAttribute="bottom" secondItem="Cdn-iZ-nUx" secondAttribute="bottom" constant="4" id="y5F-vo-flK"/>
                                 </constraints>
                             </view>
+                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="4" minValue="-1" maxValue="4" translatesAutoresizingMaskIntoConstraints="NO" id="EtD-X7-TjZ">
+                                <rect key="frame" x="14" y="-2" width="295" height="31"/>
+                            </slider>
                         </subviews>
                         <constraints>
                             <constraint firstItem="z5D-0U-KQ1" firstAttribute="leading" secondItem="NPw-2x-d5g" secondAttribute="leading" id="0D1-Wa-Rwy"/>
                             <constraint firstItem="NPw-2x-d5g" firstAttribute="centerX" secondItem="f61-3d-r5G" secondAttribute="centerX" id="3yi-QD-xLT"/>
                             <constraint firstItem="FjV-AO-ThF" firstAttribute="width" secondItem="QMz-gr-6IX" secondAttribute="width" id="7zg-3L-gRM"/>
                             <constraint firstItem="QMz-gr-6IX" firstAttribute="width" secondItem="NPw-2x-d5g" secondAttribute="width" id="DVj-rC-DdX"/>
-                            <constraint firstItem="NPw-2x-d5g" firstAttribute="top" secondItem="fwG-HK-XNU" secondAttribute="top" constant="16" id="FWO-jt-B2L"/>
+                            <constraint firstItem="NPw-2x-d5g" firstAttribute="top" secondItem="fwG-HK-XNU" secondAttribute="top" constant="22" id="FWO-jt-B2L"/>
                             <constraint firstItem="z5D-0U-KQ1" firstAttribute="top" secondItem="FjV-AO-ThF" secondAttribute="bottom" constant="8" id="PJs-Av-Wn0"/>
                             <constraint firstItem="QMz-gr-6IX" firstAttribute="centerX" secondItem="f61-3d-r5G" secondAttribute="centerX" id="RaS-um-apt"/>
+                            <constraint firstItem="EtD-X7-TjZ" firstAttribute="width" secondItem="NPw-2x-d5g" secondAttribute="width" id="dz1-88-2ed"/>
                             <constraint firstItem="FjV-AO-ThF" firstAttribute="centerX" secondItem="f61-3d-r5G" secondAttribute="centerX" id="gwc-ZM-blb"/>
                             <constraint firstItem="FjV-AO-ThF" firstAttribute="top" secondItem="QMz-gr-6IX" secondAttribute="bottom" constant="8" id="kAa-4C-MQD"/>
+                            <constraint firstItem="EtD-X7-TjZ" firstAttribute="leading" secondItem="fwG-HK-XNU" secondAttribute="leading" constant="16" id="kuc-Qm-eBQ"/>
+                            <constraint firstItem="EtD-X7-TjZ" firstAttribute="top" secondItem="f61-3d-r5G" secondAttribute="top" constant="-2" id="kyR-AE-Jms"/>
                             <constraint firstItem="z5D-0U-KQ1" firstAttribute="centerX" secondItem="f61-3d-r5G" secondAttribute="centerX" id="qfh-ww-m8Q"/>
                             <constraint firstItem="QMz-gr-6IX" firstAttribute="top" secondItem="NPw-2x-d5g" secondAttribute="bottom" constant="8" id="y6T-Na-Epa"/>
                         </constraints>
