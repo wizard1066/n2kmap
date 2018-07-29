@@ -67,6 +67,8 @@ extension Double {
 
 
 class HiddingViewController: UIViewController, UIDropInteractionDelegate, MKMapViewDelegate, UIPopoverPresentationControllerDelegate, setWayPoint, zap, UICloudSharingControllerDelegate, showPoint, CLLocationManagerDelegate,save2Cloud, table2Map, SFSafariViewControllerDelegate {
+  
+    
 
     
  
@@ -776,9 +778,26 @@ class HiddingViewController: UIViewController, UIDropInteractionDelegate, MKMapV
                 mapView.removeAnnotation(wayP)
             }
         }
+        let index2F  = listOfPoint2Seek.index(where: { (item) -> Bool in
+            item.name == wayPoint2G
+        })
+        if index2F != nil {
+            zapBoxes(boxes2D:  listOfPoint2Seek[index2F!].boxes! as! [CLLocation])
+        }
     }
     
     // MARK: setWayPoint protocl implementation
+    
+    func didSetProximity(name: String?, proximity: CLProximity?) {
+        if proximity != nil {
+            let index2F  = listOfPoint2Seek.index(where: { (item) -> Bool in
+                item.name == name
+            })
+            if index2F != nil {
+                listOfPoint2Seek[index2F!].proximity = proximity
+            }
+        }
+    }
     
     func didSetURL(name: String?, URL: String?) {
         for wayPoints in mapView.annotations {
@@ -1060,6 +1079,22 @@ private func getSECoordinate(mRect: MKMapRect) -> CLLocationCoordinate2D {
             }
         }
         return boxes2S
+    }
+    
+    func zapBoxes(boxes2D:[CLLocation]) {
+//        let boxes2D = wP2E?.boxes
+        for overlays in mapView.overlays {
+            let latitude = overlays.coordinate.latitude
+            let longitude = overlays.coordinate.longitude
+            for boxes in boxes2D {
+                let long2C:Double = ((boxes.coordinate.longitude))
+                let lat2C:Double = (boxes.coordinate.latitude)
+                print("\(long2C) \(lat2C) \(longitude) \(latitude)")
+                if long2C == longitude, lat2C == latitude {
+                    mapView.remove(overlays)
+                }
+            }
+        }
     }
     
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, didChange newState: MKAnnotationViewDragState, fromOldState oldState: MKAnnotationViewDragState) {
@@ -2140,7 +2175,7 @@ func fetchShare() {
     // MARK: Popover Delegate
     
     func popoverPresentationControllerDidDismissPopover(_ popoverPresentationController: UIPopoverPresentationController) {
-//        self.confirmSequenced()
+//        print("\(listOfPoint2Seek[0].proximity!.rawValue)")
     }
     
      @IBOutlet weak var hideView: HideView!

@@ -495,6 +495,7 @@ class HideTableViewController: UITableViewController, UIPopoverPresentationContr
         let destination = segue.destination.contents
         if segue.identifier == Constants.EditUserWaypoint {
             let ewvc = destination as? EditWaypointController
+            ewvc?.lastProximity =  listOfPoint2Seek[classIndexPath.row].proximity
             ewvc?.nameText = listOfPoint2Seek[classIndexPath.row].name
             ewvc?.hintText = listOfPoint2Seek[classIndexPath.row].hint
             ewvc?.challengeText = listOfPoint2Seek[classIndexPath.row].challenge

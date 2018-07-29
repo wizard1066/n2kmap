@@ -16,6 +16,7 @@ protocol  setWayPoint  {
     func didSetImage(name: String?, image: UIImage?)
     func didSetChallenge(name: String?, challenge: String?)
     func didSetURL(name: String?, URL:String?)
+    func didSetProximity(name: String?, proximity: CLProximity?)
 }
 
 class EditWaypointController: UIViewController, UIDropInteractionDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIDocumentMenuDelegate, UIDocumentPickerDelegate {
@@ -30,30 +31,29 @@ class EditWaypointController: UIViewController, UIDropInteractionDelegate, UIIma
         //code
     }
     
-    
     var setWayPoint: setWayPoint!
     var me:HiddingViewController!
     var lastProximity: CLProximity? {
         willSet {
-            if lastProximity == .near {
+            if lastProximity == .near, manProx == nil {
                 hereLabel.backgroundColor = UIColor.clear
                 nearLabel.backgroundColor = UIColor.yellow
                 farLabel.backgroundColor = UIColor.yellow
                 thereLabel.backgroundColor = UIColor.yellow
             }
-            if lastProximity == .far {
+            if lastProximity == .far, manProx == nil {
                 hereLabel.backgroundColor = UIColor.clear
                 nearLabel.backgroundColor = UIColor.clear
                 farLabel.backgroundColor = UIColor.yellow
                 thereLabel.backgroundColor = UIColor.yellow
             }
-            if lastProximity == .immediate {
+            if lastProximity == .immediate, manProx == nil {
                 hereLabel.backgroundColor = UIColor.yellow
                 nearLabel.backgroundColor = UIColor.yellow
                 farLabel.backgroundColor = UIColor.yellow
                 thereLabel.backgroundColor = UIColor.yellow
             }
-            if lastProximity == .unknown {
+            if lastProximity == .unknown, manProx == nil {
                 hereLabel.backgroundColor = UIColor.clear
                 nearLabel.backgroundColor = UIColor.clear
                 farLabel.backgroundColor = UIColor.clear
@@ -119,7 +119,8 @@ class EditWaypointController: UIViewController, UIDropInteractionDelegate, UIIma
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         picker.presentingViewController?.dismiss(animated: true, completion: {
-            // code
+//            let prox2U = self.manProx != nil ? self.manProx : self.lastProximity
+//           self.setWayPoint.didSetProximity(name: self.nameTextField.text, proximity: prox2U)
         })
     }
     
@@ -131,7 +132,8 @@ class EditWaypointController: UIViewController, UIDropInteractionDelegate, UIIma
             }
         }
         picker.presentingViewController?.dismiss(animated: true, completion: {
-            // code
+//            let prox2U = self.manProx != nil ? self.manProx : self.lastProximity
+//            self.setWayPoint.didSetProximity(name: self.nameTextField.text, proximity: prox2U)
         })
     }
     
@@ -151,6 +153,41 @@ class EditWaypointController: UIViewController, UIDropInteractionDelegate, UIIma
     var nameText: String?
     var hintText: String?
     var challengeText: String?
+    var manProx: CLProximity?
+    
+    //MARK: Gesture methods
+    
+    @objc func hereTap(_ sender: UITapGestureRecognizer) {
+        manProx = CLProximity.immediate
+        hereLabel.backgroundColor = UIColor.yellow
+        nearLabel.backgroundColor = UIColor.yellow
+        farLabel.backgroundColor = UIColor.yellow
+        thereLabel.backgroundColor = UIColor.yellow
+    }
+    
+    @objc func nearTap(_ sender: UITapGestureRecognizer) {
+        manProx = CLProximity.near
+        hereLabel.backgroundColor = UIColor.clear
+        nearLabel.backgroundColor = UIColor.yellow
+        farLabel.backgroundColor = UIColor.yellow
+        thereLabel.backgroundColor = UIColor.yellow
+    }
+    
+    @objc func farTap(_ sender: UITapGestureRecognizer) {
+        manProx = CLProximity.far
+        hereLabel.backgroundColor = UIColor.clear
+        nearLabel.backgroundColor = UIColor.clear
+        farLabel.backgroundColor = UIColor.yellow
+        thereLabel.backgroundColor = UIColor.yellow
+    }
+    
+    @objc func thereTap(_ sender: UITapGestureRecognizer) {
+        manProx = CLProximity.unknown
+        hereLabel.backgroundColor = UIColor.clear
+        nearLabel.backgroundColor = UIColor.clear
+        farLabel.backgroundColor = UIColor.clear
+        thereLabel.backgroundColor = UIColor.yellow
+    }
     
     // MARK: View Methods
 
@@ -159,6 +196,24 @@ class EditWaypointController: UIViewController, UIDropInteractionDelegate, UIIma
         if UIDevice.current.userInterfaceIdiom == .phone {
             // not needed
         }
+        
+        let hereTap = UITapGestureRecognizer(target: self, action: #selector(self.hereTap(_:)))
+        hereLabel.addGestureRecognizer(hereTap)
+        hereLabel.isUserInteractionEnabled = true
+        
+        let nearTap = UITapGestureRecognizer(target: self, action: #selector(self.nearTap(_:)))
+        nearLabel.addGestureRecognizer(nearTap)
+        nearLabel.isUserInteractionEnabled = true
+        
+        let farTap = UITapGestureRecognizer(target: self, action: #selector(self.farTap(_:)))
+        farLabel.addGestureRecognizer(farTap)
+        farLabel.isUserInteractionEnabled = true
+        
+        let thereTap = UITapGestureRecognizer(target: self, action: #selector(self.thereTap(_:)))
+        thereLabel.addGestureRecognizer(thereTap)
+        thereLabel.isUserInteractionEnabled = true
+        
+        
         nameTextField.text = nameText
         hintTextField.text = hintText
         challengeTextField.text = challengeText
@@ -198,6 +253,12 @@ class EditWaypointController: UIViewController, UIDropInteractionDelegate, UIIma
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         stopListeningToTextFields()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        let prox2U = self.manProx != nil ? self.manProx : self.lastProximity
+        self.setWayPoint.didSetProximity(name: self.nameTextField.text, proximity: prox2U)
     }
     
     override func viewWillLayoutSubviews() {
