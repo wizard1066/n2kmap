@@ -95,6 +95,12 @@ class HiddingViewController: UIViewController, UIDropInteractionDelegate, MKMapV
     @IBOutlet weak var proximityLabel: UILabel!
     
     @IBOutlet weak var playButton: UIBarButtonItem!
+  
+    @IBOutlet weak var thereLabel: UIImageView!
+    @IBOutlet weak var farLabel: UIImageView!
+    @IBOutlet weak var nearLabel: UIImageView!
+    @IBOutlet weak var hereLabel: UIImageView!
+    
     @IBAction func saveButton(_ sender: Any) {
         tryNow = !tryNow
         if tryNow {
@@ -124,6 +130,7 @@ class HiddingViewController: UIViewController, UIDropInteractionDelegate, MKMapV
         }
         save2Cloud(rex2S: listOfPoint2Seek, rex2D: nil, sharing: false, reordered: false)
     }
+    
     
     @IBAction func searchButton(_ sender: Any) {
         let url = URL(string: "https://elearning.swisseducation.com")
@@ -350,7 +357,7 @@ class HiddingViewController: UIViewController, UIDropInteractionDelegate, MKMapV
     
     var isSearchingForBeacons = false
     var lastFoundBeacon:CLBeacon!
-    var lastProximity: CLProximity!
+    var lastProximity: CLProximity?
     
     func locationManager(_ manager: CLLocationManager, didDetermineState state: CLRegionState, for region: CLRegion) {
 //        DispatchQueue.main.async {
@@ -385,13 +392,16 @@ class HiddingViewController: UIViewController, UIDropInteractionDelegate, MKMapV
     var beaconsInTheBag:[String:Bool?] = [:]
     var beaconsLogged:[String] = []
     var cMinorMajorKey: String!
+    var signalStength: CLProximity?
     
     func locationManager(_ manager: CLLocationManager, didRangeBeacons beacons: [CLBeacon], in region: CLBeaconRegion) {
 //        var closestBeacon: CLBeacon!
         if usingMode == op.recording {
             if beacons.count == 0 {
+                lastProximity = nil
                 proximityLabel.isHidden = true
             } else {
+                lastProximity = beacons.first?.proximity
                 proximityLabel.isHidden = false
             }
         }
@@ -469,13 +479,29 @@ class HiddingViewController: UIViewController, UIDropInteractionDelegate, MKMapV
                     switch lastFoundBeacon.proximity {
                     case CLProximity.immediate:
                         proximityMessage = "Close " + String(CLProximity.immediate.rawValue) + " "
-                        
+                        hereLabel.backgroundColor = UIColor.yellow
+                         nearLabel.backgroundColor = UIColor.yellow
+                        farLabel.backgroundColor = UIColor.yellow
+                        thereLabel.backgroundColor = UIColor.yellow
                     case CLProximity.near:
                         proximityMessage = "Near " + String(CLProximity.near.rawValue) + " "
+                        hereLabel.backgroundColor = UIColor.clear
+                        nearLabel.backgroundColor = UIColor.yellow
+                        farLabel.backgroundColor = UIColor.yellow
+                        thereLabel.backgroundColor = UIColor.yellow
+                        
                     case CLProximity.far:
                         proximityMessage = "Far " + String(CLProximity.far.rawValue) + " "
+                        hereLabel.backgroundColor = UIColor.clear
+                        nearLabel.backgroundColor = UIColor.clear
+                        farLabel.backgroundColor = UIColor.yellow
+                        thereLabel.backgroundColor = UIColor.yellow
                     default:
                         proximityMessage = "??? " + String(CLProximity.unknown.rawValue) + " "
+                        hereLabel.backgroundColor = UIColor.clear
+                        nearLabel.backgroundColor = UIColor.clear
+                        farLabel.backgroundColor = UIColor.clear
+                        thereLabel.backgroundColor = UIColor.yellow
                     }
                     self.proximityLabel.text = proximityMessage + "Maj \(closestBeacon.major.intValue) Min \(closestBeacon.minor.intValue)\n"
                 }
@@ -1947,6 +1973,7 @@ func fetchShare() {
             let index2F  = listOfPoint2Seek.index(where: { (item) -> Bool in
                 item.name ==  (pinViewSelected?.title)!
             })
+            
             ewvc?.nameText = listOfPoint2Seek[index2F!].name
             ewvc?.hintText = listOfPoint2Seek[index2F!].hint
             ewvc?.me = self
@@ -1972,12 +1999,14 @@ func fetchShare() {
 //            if order2Search == nil { order2Search = 0 } else { order2Search = index2F }
             if index2F == nil {
                 order2Search = 0
+                ewvc?.lastProximity = lastProximity
                 ewvc?.nameText =  uniqueName
                 ewvc?.hintText = "ibeacon"
                 ewvc?.setWayPoint = self
                 ewvc?.me = self
             } else {
                 order2Search = index2F
+                ewvc?.lastProximity = lastProximity
                 ewvc?.nameText = listOfPoint2Seek[index2F!].name
                 ewvc?.hintText = listOfPoint2Seek[index2F!].hint
                 ewvc?.setWayPoint = self
@@ -2217,6 +2246,14 @@ func fetchShare() {
 //        }
         highLabel.isHidden = true
         lowLabel.isHidden = true
+        hereLabel.layer.borderWidth = 1
+        hereLabel.layer.borderColor = UIColor(red:222/255, green:225/255, blue:227/255, alpha: 1).cgColor
+        nearLabel.layer.borderWidth = 1
+        nearLabel.layer.borderColor = UIColor(red:222/255, green:225/255, blue:227/255, alpha: 1).cgColor
+        farLabel.layer.borderWidth = 1
+        farLabel.layer.borderColor = UIColor(red:222/255, green:225/255, blue:227/255, alpha: 1).cgColor
+        thereLabel.layer.borderWidth = 1
+        thereLabel.layer.borderColor = UIColor(red:222/255, green:225/255, blue:227/255, alpha: 1).cgColor
     }
     
     // MARK: // StarStrella
@@ -2332,6 +2369,16 @@ func fetchShare() {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+//        let redView = UIView(frame: CGRect(x: 50, y: 150, width: 128, height: 128))
+//        redView.backgroundColor = .red
+//        view.addSubview(redView)
+//
+//        let maskView = UIView(frame: CGRect(x: 0, y: 0, width: 64, height: 64))
+//        maskView.backgroundColor = UIColor(white: 0, alpha: 0.5)
+//        maskView.layer.cornerRadius = 32
+//        redView.mask = maskView
+        
         buttonColour = playButton.tintColor
         cleanup()
         trigger = point.gps

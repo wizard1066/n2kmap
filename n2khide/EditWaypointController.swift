@@ -8,7 +8,7 @@
 
 import UIKit
 import MobileCoreServices
-
+import CoreLocation
 
 protocol  setWayPoint  {
     func didSetName(originalName: String?, name: String?)
@@ -20,6 +20,11 @@ protocol  setWayPoint  {
 
 class EditWaypointController: UIViewController, UIDropInteractionDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIDocumentMenuDelegate, UIDocumentPickerDelegate {
     
+    @IBOutlet weak var hereLabel: UIImageView!
+    @IBOutlet weak var nearLabel: UIImageView!
+    @IBOutlet weak var farLabel: UIImageView!
+    @IBOutlet weak var thereLabel: UIImageView!
+    
     // MARK: Document Picker
     func documentMenu(_ documentMenu: UIDocumentMenuViewController, didPickDocumentPicker documentPicker: UIDocumentPickerViewController) {
         //code
@@ -28,6 +33,7 @@ class EditWaypointController: UIViewController, UIDropInteractionDelegate, UIIma
     
     var setWayPoint: setWayPoint!
     var me:HiddingViewController!
+    var lastProximity: CLProximity?
     
     //MARK: Camera and Library routines
     
@@ -131,6 +137,30 @@ class EditWaypointController: UIViewController, UIDropInteractionDelegate, UIIma
         challengeTextField.text = challengeText
         nameTextField.becomeFirstResponder()
         // Do any additional setup after loading the view.
+        if lastProximity != nil {
+            switch lastProximity! {
+            case .near:
+                self.nearLabel.backgroundColor = UIColor.yellow
+                break
+            case .far:
+                self.farLabel.backgroundColor = UIColor.yellow
+                break
+            case .immediate:
+                self.hereLabel.backgroundColor = UIColor.yellow
+                break
+            case .unknown:
+                self.thereLabel.backgroundColor = UIColor.yellow
+                break
+            }
+        }
+        hereLabel.layer.borderWidth = 1
+        hereLabel.layer.borderColor = UIColor(red:222/255, green:225/255, blue:227/255, alpha: 1).cgColor
+        nearLabel.layer.borderWidth = 1
+        nearLabel.layer.borderColor = UIColor(red:222/255, green:225/255, blue:227/255, alpha: 1).cgColor
+        farLabel.layer.borderWidth = 1
+        farLabel.layer.borderColor = UIColor(red:222/255, green:225/255, blue:227/255, alpha: 1).cgColor
+        thereLabel.layer.borderWidth = 1
+        thereLabel.layer.borderColor = UIColor(red:222/255, green:225/255, blue:227/255, alpha: 1).cgColor
     }
     
     override func viewDidAppear(_ animated: Bool) {
