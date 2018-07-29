@@ -33,7 +33,34 @@ class EditWaypointController: UIViewController, UIDropInteractionDelegate, UIIma
     
     var setWayPoint: setWayPoint!
     var me:HiddingViewController!
-    var lastProximity: CLProximity?
+    var lastProximity: CLProximity? {
+        willSet {
+            if lastProximity == .near {
+                hereLabel.backgroundColor = UIColor.clear
+                nearLabel.backgroundColor = UIColor.yellow
+                farLabel.backgroundColor = UIColor.yellow
+                thereLabel.backgroundColor = UIColor.yellow
+            }
+            if lastProximity == .far {
+                hereLabel.backgroundColor = UIColor.clear
+                nearLabel.backgroundColor = UIColor.clear
+                farLabel.backgroundColor = UIColor.yellow
+                thereLabel.backgroundColor = UIColor.yellow
+            }
+            if lastProximity == .immediate {
+                hereLabel.backgroundColor = UIColor.yellow
+                nearLabel.backgroundColor = UIColor.yellow
+                farLabel.backgroundColor = UIColor.yellow
+                thereLabel.backgroundColor = UIColor.yellow
+            }
+            if lastProximity == .unknown {
+                hereLabel.backgroundColor = UIColor.clear
+                nearLabel.backgroundColor = UIColor.clear
+                farLabel.backgroundColor = UIColor.clear
+                thereLabel.backgroundColor = UIColor.yellow
+            }
+        }
+    }
     
     //MARK: Camera and Library routines
     

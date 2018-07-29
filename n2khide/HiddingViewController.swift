@@ -419,14 +419,19 @@ class HiddingViewController: UIViewController, UIDropInteractionDelegate, MKMapV
                             beaconsLogged.append(uniqueName)
                             let newWayPoint = wayPoint(recordID:nil, UUID: globalUUID, major:closestBeacon.major as? Int, minor: closestBeacon.minor as? Int, proximity: closestBeacon.proximity, coordinates: nil, name: uniqueName, hint:nil, image: nil, order: listOfPoint2Seek.count, boxes: nil, challenge: nil,  URL: nil)
                             wayPoints[cMinorMajorKey] = newWayPoint
-                           
+                            if cMinorMajorKey != nil {
+                                let k2U = String(closestBeacon.minor as! Int) + String(closestBeacon.major as! Int)
+                                self.beaconsInTheBag[k2U] = true
+                                WP2M[k2U] = uniqueName
+                            }
                             listOfPoint2Seek.append(newWayPoint)
                             performSegue(withIdentifier: Constants.EditUserWaypoint, sender: view)
                         }
                 }
         }
         
-        if beacons.count > 0, usingMode == op.playing, codeRunState == gameplay.playing {
+//        if beacons.count > 0, usingMode == op.playing, codeRunState == gameplay.playing {
+        if beacons.count > 0 {
             let beacons2S = beacons.filter { $0.proximity != CLProximity.unknown }
             if beacons2S.count > 0 {
                 if let closestBeacon = beacons2S[0] as? CLBeacon {
@@ -473,8 +478,9 @@ class HiddingViewController: UIViewController, UIDropInteractionDelegate, MKMapV
         
         if beacons.count > 0 {
             if let closestBeacon = beacons[0] as? CLBeacon {
-                if closestBeacon != lastFoundBeacon, lastProximity != closestBeacon.proximity  {
+//                if closestBeacon != lastFoundBeacon, lastProximity != closestBeacon.proximity  {
                     lastFoundBeacon = closestBeacon
+                    editSegue?.lastProximity = closestBeacon.proximity
                     lastProximity = closestBeacon.proximity
                     switch lastFoundBeacon.proximity {
                     case CLProximity.immediate:
@@ -489,7 +495,6 @@ class HiddingViewController: UIViewController, UIDropInteractionDelegate, MKMapV
                         nearLabel.backgroundColor = UIColor.yellow
                         farLabel.backgroundColor = UIColor.yellow
                         thereLabel.backgroundColor = UIColor.yellow
-                        
                     case CLProximity.far:
                         proximityMessage = "Far " + String(CLProximity.far.rawValue) + " "
                         hereLabel.backgroundColor = UIColor.clear
@@ -504,7 +509,7 @@ class HiddingViewController: UIViewController, UIDropInteractionDelegate, MKMapV
                         thereLabel.backgroundColor = UIColor.yellow
                     }
                     self.proximityLabel.text = proximityMessage + "Maj \(closestBeacon.major.intValue) Min \(closestBeacon.minor.intValue)\n"
-                }
+//                }
             }
         }
     }
@@ -636,8 +641,10 @@ class HiddingViewController: UIViewController, UIDropInteractionDelegate, MKMapV
         let zap = listOfPoint2Search.index(where: { (item) -> Bool in
             item.name == name2S
         })
-        listOfPoint2Search.remove(at: zap!)
-        listOfPoint2Search.insert(WP2F, at: zap!)
+        if zap != nil {
+            listOfPoint2Search.remove(at: zap!)
+            listOfPoint2Search.insert(WP2F, at: zap!)
+        }
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
@@ -1963,6 +1970,8 @@ func fetchShare() {
      
      // MARK: Navigation
     
+    var editSegue: EditWaypointController?
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let destination = segue.destination.contents
         let annotationView = sender as? MKAnnotationView
@@ -1992,11 +2001,13 @@ func fetchShare() {
         }
         if segue.identifier == Constants.EditUserWaypoint, trigger == point.ibeacon {
             let ewvc = destination as? EditWaypointController
+            editSegue = ewvc
             let uniqueName = "UUID" + "-" + cMinorMajorKey
             let index2F:Int?  = listOfPoint2Seek.index(where: { (item) -> Bool in
                    item.name == uniqueName
             })
 //            if order2Search == nil { order2Search = 0 } else { order2Search = index2F }
+
             if index2F == nil {
                 order2Search = 0
                 ewvc?.lastProximity = lastProximity
@@ -2172,7 +2183,9 @@ func fetchShare() {
     
     private func fadeTitles() {
         DispatchQueue.main.async {
-            self.timer2D.invalidate()
+            if self.timer2D != nil {
+                self.timer2D.invalidate()
+            }
             UIView.animate(withDuration: 4.0) {
                 self.latitudeNextLabel.alpha = 0
                 self.longitudeNextLabel.alpha = 0
