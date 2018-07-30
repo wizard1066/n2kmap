@@ -278,6 +278,20 @@ class HideTableViewController: UITableViewController, UIPopoverPresentationContr
             }
             return cell!
         }
+        if windowView == .points, listOfPoint2Seek.count == 1 {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "wayPointCell", for: indexPath) as? WayPointViewCell
+            let waypoint = listOfPoint2Seek[indexPath.row]
+            cell?.nameLabel.text = waypoint.name
+            cell?.countLabel.text = "\(String(describing: waypoint.order!))"
+            if waypoint.URL != nil {
+                cell?.imageLabel.image = UIImage(named: "noun_link_654795")
+            }
+            if waypoint.image != nil {
+                cell?.imageLabel.image = waypoint.image
+            }
+            return cell!
+        }
+            
         if windowView == .playing, usingMode == op.playing {
               let cell = tableView.dequeueReusableCell(withIdentifier: "searchViewCell", for: indexPath) as? SearchTableViewCell
             if windowView == .playing, listOfPoint2Search.count > 0 {
