@@ -1404,8 +1404,10 @@ private func getSECoordinate(mRect: MKMapRect) -> CLLocationCoordinate2D {
         //        }
     }
     
+    var listOfWayPointsSaved:[wayPoint]!
+    
     func save2CloudV2(rex2S:[wayPoint]?, rex2D:[CKRecordID]?, sharing: Bool, reordered: Bool) -> [wayPoint] {
-        var listOfWayPointsSaved:[wayPoint] = []
+        listOfWayPointsSaved = []
         DispatchQueue.main.async {
             var p2S = 0
             for point2Save in rex2S! {
@@ -1437,7 +1439,7 @@ private func getSECoordinate(mRect: MKMapRect) -> CLLocationCoordinate2D {
 //                rex2U?.recordID = ckWayPointRecord.recordID
                 
                 let newWP  = wayPoint(recordID: point2Save.recordID, UUID: point2Save.UUID, major: point2Save.major, minor: point2Save.minor, proximity: point2Save.proximity, coordinates: point2Save.coordinates, name: point2Save.name, hint: point2Save.hint, image: point2Save.image, order: point2Save.order, boxes: point2Save.boxes, challenge: point2Save.challenge, URL: point2Save.URL)
-                listOfWayPointsSaved.append(newWP)
+                self.listOfWayPointsSaved.append(newWP)
                 
                 var image2D: Data!
                 if point2Save.image != nil {
