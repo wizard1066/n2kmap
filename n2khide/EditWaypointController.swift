@@ -80,8 +80,8 @@ class EditWaypointController: UIViewController, UIDropInteractionDelegate, UIIma
     func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentAt url: URL) {
         getDataFromUrl(url: url) { data, response, error in
             guard let data = data, error == nil else { return }
-            print(response?.suggestedFilename ?? url.lastPathComponent)
-            print("Download Finished")
+//            print(response?.suggestedFilename ?? url.lastPathComponent)
+//            print("Download Finished")
             DispatchQueue.main.async() {
                 self.setWayPoint.didSetImage(name: self.nameTextField.text, image: UIImage(data: data))
             }

@@ -264,7 +264,7 @@ class HideTableViewController: UITableViewController, UIPopoverPresentationContr
 
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        print("fcuk30072018  windowView \(windowView) usingMode \(usingMode) listOfPoint2Seek.count \(listOfPoint2Seek.count)")
+        //rint("fcuk30072018  windowView \(windowView) usingMode \(usingMode) listOfPoint2Seek.count \(listOfPoint2Seek.count)")
         let cell = tableView.dequeueReusableCell(withIdentifier: "RuleCell", for: indexPath)
         if windowView == .points, usingMode != op.playing , listOfPoint2Seek.count > 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "wayPointCell", for: indexPath) as? WayPointViewCell
@@ -391,7 +391,7 @@ class HideTableViewController: UITableViewController, UIPopoverPresentationContr
         if windowView == .points {
             closeAction = UIContextualAction(style: .normal, title:  "Update", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
                  if windowView == .points {
-                    print("OK, marked as Closed")
+                    //rint("OK, marked as Closed")
                     self.classIndexPath = indexPath
                     self.rowView = view
                     self.performSegue(withIdentifier: Constants.EditUserWaypoint, sender: view)
