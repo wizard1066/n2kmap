@@ -1580,6 +1580,7 @@ private func getSECoordinate(mRect: MKMapRect) -> CLLocationCoordinate2D {
         scanButton.isEnabled = true
         plusButton.isEnabled = true
         usingMode  = op.recording
+        windowView = .points
     }
     
     func doLive() {

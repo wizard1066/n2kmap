@@ -264,6 +264,7 @@ class HideTableViewController: UITableViewController, UIPopoverPresentationContr
 
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        print("fcuk30072018  windowView \(windowView) usingMode \(usingMode) listOfPoint2Seek.count \(listOfPoint2Seek.count)")
         let cell = tableView.dequeueReusableCell(withIdentifier: "RuleCell", for: indexPath)
         if windowView == .points, usingMode != op.playing , listOfPoint2Seek.count > 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "wayPointCell", for: indexPath) as? WayPointViewCell
@@ -278,7 +279,7 @@ class HideTableViewController: UITableViewController, UIPopoverPresentationContr
             }
             return cell!
         }
-        if windowView == .points, listOfPoint2Seek.count == 1 {
+        if windowView == .playing, listOfPoint2Seek.count == 1 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "wayPointCell", for: indexPath) as? WayPointViewCell
             let waypoint = listOfPoint2Seek[indexPath.row]
             cell?.nameLabel.text = waypoint.name
@@ -292,7 +293,7 @@ class HideTableViewController: UITableViewController, UIPopoverPresentationContr
             return cell!
         }
             
-        if windowView == .playing, usingMode == op.playing {
+        if windowView == .playing, usingMode == op.playing, listOfPoint2Seek.count > 1 {
               let cell = tableView.dequeueReusableCell(withIdentifier: "searchViewCell", for: indexPath) as? SearchTableViewCell
             if windowView == .playing, listOfPoint2Search.count > 0 {
                 cell?.nameLabel.text = listOfPoint2Search[indexPath.row].name
