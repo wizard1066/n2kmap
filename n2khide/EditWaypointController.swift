@@ -59,6 +59,7 @@ class EditWaypointController: UIViewController, UIDropInteractionDelegate, UIIma
                 farLabel.backgroundColor = UIColor.clear
                 thereLabel.backgroundColor = UIColor.yellow
             }
+            
         }
     }
     
