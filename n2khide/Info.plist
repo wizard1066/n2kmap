@@ -19,7 +19,7 @@
 	<key>CFBundleShortVersionString</key>
 	<string>1.0</string>
 	<key>CFBundleVersion</key>
-	<string>1.1</string>
+	<string>1.2</string>
 	<key>CKSharingSupported</key>
 	<true/>
 	<key>LSRequiresIPhoneOS</key>
@@ -44,7 +44,7 @@
 	<key>NSCameraUsageDescription</key>
 	<string>Needed if you want to take snaps for your maphunt</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>n2khide requires access to your devices&apos;s location to notify you when you find a hidden pin.</string>
+	<string>n2khide requires access to your devices's location to notify you when you find a hidden pin.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>n2khide is currently monitoring your location.</string>
 	<key>UIAppFonts</key>
