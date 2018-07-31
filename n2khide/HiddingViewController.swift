@@ -1405,14 +1405,7 @@ private func getSECoordinate(mRect: MKMapRect) -> CLLocationCoordinate2D {
         //        }
     }
     
-    var listOfWayPointsCopy:[wayPoint]! {
-        didSet {
-            listOfPoint2Seek = listOfWayPointsCopy
-        }
-    }
-    
    
-    
     func save2CloudV2(rex2S:[wayPoint]?, rex2D:[CKRecordID]?, sharing: Bool, reordered: Bool) {
         var listOfWayPointsSaved:[wayPoint]! = []
         print("fcuk30072018 \(rex2S?.count)")
@@ -1470,7 +1463,7 @@ private func getSECoordinate(mRect: MKMapRect) -> CLLocationCoordinate2D {
             
             let modifyOp = CKModifyRecordsOperation(recordsToSave:
                 self.records2Share, recordIDsToDelete: rex2D)
-            modifyOp.savePolicy = .allKeys
+            modifyOp.savePolicy = .changedKeys
             modifyOp.perRecordCompletionBlock = {(record,error) in
                 print("error \(error.debugDescription)")
             }
@@ -1859,7 +1852,6 @@ func fetchShare() {
                 }
             } else {
                 let k2U = String(minor!) + String(major!)
-                print("fcuk3007 k2U \(k2U)")
                  if spotDuplicateError![k2U] == nil {
                     let prox2U = CLProximity(rawValue: proximity!)
                     let wp2S = wayPoint(recordID: record2U.recordID,UUID: globalUUID, major:major, minor: minor, proximity: prox2U, coordinates: nil, name: name, hint: hint, image: image2D, order: order, boxes: nil, challenge: challenge, URL: url2U)
@@ -2297,14 +2289,17 @@ func fetchShare() {
                 self.fetchParent(record2O!)
             }
         }
-//        for family: String in UIFont.familyNames
-//        {
-//            print("\(family)")
-//            for names: String in UIFont.fontNames(forFamilyName: family)
-//            {
-//                print("== \(names)")
-//            }
-//        }
+
+//        check internet
+                    if reachable() {
+                        print("Internet connection OK")
+                    } else {
+                        print("Internet connection FAILED")
+                          let alert = UIAlertController(title: "No Internet Connection", message: "Make sure your device is connected to the internet.", preferredStyle: .alert)
+                         alert.addAction(UIAlertAction(title: "Ok", style: .default,handler: nil))
+                         self.present(alert, animated: true, completion: nil)
+                    }
+        
         highLabel.isHidden = true
         lowLabel.isHidden = true
         hereLabel.layer.borderWidth = 1

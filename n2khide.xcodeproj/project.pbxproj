@@ -17,6 +17,7 @@
 		EF56461D20BD9A4C00F500F6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EF56461B20BD9A4C00F500F6 /* Main.storyboard */; };
 		EF56461F20BD9A4E00F500F6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EF56461E20BD9A4E00F500F6 /* Assets.xcassets */; };
 		EF56462220BD9A4E00F500F6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EF56462020BD9A4E00F500F6 /* LaunchScreen.storyboard */; };
+		EF83B5842110460A005C353A /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF83B5832110460A005C353A /* Reachability.swift */; };
 		EF85869620BE845100A21777 /* HideTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF85869520BE845100A21777 /* HideTableViewController.swift */; };
 		EF85869820BE847300A21777 /* HideView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF85869720BE847300A21777 /* HideView.swift */; };
 		EF85869C20BE84A300A21777 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF85869B20BE84A300A21777 /* Utilities.swift */; };
@@ -44,6 +45,7 @@
 		EF56461E20BD9A4E00F500F6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		EF56462120BD9A4E00F500F6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		EF56462320BD9A4E00F500F6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		EF83B5832110460A005C353A /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		EF85869520BE845100A21777 /* HideTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HideTableViewController.swift; sourceTree = "<group>"; };
 		EF85869720BE847300A21777 /* HideView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HideView.swift; sourceTree = "<group>"; };
 		EF85869B20BE84A300A21777 /* Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
@@ -129,6 +131,7 @@
 				EF8586A120BEE09C00A21777 /* EditWaypointController.swift */,
 				EF85869720BE847300A21777 /* HideView.swift */,
 				EF85869D20BE880800A21777 /* HiddingViewController.swift */,
+				EF83B5832110460A005C353A /* Reachability.swift */,
 				EF0C63A520DA908700A65CC0 /* Resources */,
 				EF0C63A120D9343200A65CC0 /* ScannerViewController.swift */,
 				EF40AAB520C6F83100CF6B3E /* CustomItem.swift */,
@@ -240,6 +243,7 @@
 				EF56461820BD9A4C00F500F6 /* AppDelegate.swift in Sources */,
 				EFBA662920EA198E0093D662 /* ImageViewController.swift in Sources */,
 				EFFE6EF920ECB91800D5D904 /* WebViewController.swift in Sources */,
+				EF83B5842110460A005C353A /* Reachability.swift in Sources */,
 				EFF07FB020C03B160018C8C7 /* Common.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
