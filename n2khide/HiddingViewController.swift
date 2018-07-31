@@ -159,7 +159,6 @@ class HiddingViewController: UIViewController, UIDropInteractionDelegate, MKMapV
                     box2M = k2U
                 }
             }
-            print("fcuk2962018 overlay \(overlays.coordinate) \(latitude) \(longitude) \(box2M)")
         }
         
     }
@@ -256,7 +255,7 @@ class HiddingViewController: UIViewController, UIDropInteractionDelegate, MKMapV
                 print("\(String(describing: error?.localizedDescription))")
             }
             for rex in records! {
-                print("\(rex.value.zoneID.zoneName)")
+                
                 zoneTable[rex.value.zoneID.zoneName] = rex.value.zoneID
             }
 //            self.zonesReturned = true
@@ -681,7 +680,7 @@ class HiddingViewController: UIViewController, UIDropInteractionDelegate, MKMapV
                         } else {
                            
                             if self.presentedViewController?.contents != ImageViewController() {
-                                print("present")
+                                
                                 self.performSegue(withIdentifier: Constants.ShowImageSegue, sender: self.view)
                                 self.orderLabel.text = String(order2Search!)
                                 self.judgement()
@@ -791,6 +790,7 @@ class HiddingViewController: UIViewController, UIDropInteractionDelegate, MKMapV
     // MARK: setWayPoint protocl implementation
     
     func didSetProximity(name: String?, proximity: CLProximity?) {
+         savedMap = false
         if proximity != nil {
             let index2F  = listOfPoint2Seek.index(where: { (item) -> Bool in
                 item.name == name
@@ -802,6 +802,7 @@ class HiddingViewController: UIViewController, UIDropInteractionDelegate, MKMapV
     }
     
     func didSetURL(name: String?, URL: String?) {
+         savedMap = false
         for wayPoints in mapView.annotations {
             if wayPoints.title == name {
                 let view = mapView.view(for: wayPoints)
@@ -822,6 +823,7 @@ class HiddingViewController: UIViewController, UIDropInteractionDelegate, MKMapV
     }
     
     func didSetChallenge(name: String?, challenge: String?) {
+         savedMap = false
         if challenge != nil {
             let index2F  = listOfPoint2Seek.index(where: { (item) -> Bool in
                 item.name == name
@@ -835,6 +837,7 @@ class HiddingViewController: UIViewController, UIDropInteractionDelegate, MKMapV
     
     
     func didSetName(originalName: String?, name: String?) {
+         savedMap = false
         if !(name?.isEmpty)!, originalName != nil {
             for wayPoints in mapView.annotations {
                 if wayPoints.title == originalName {
@@ -856,6 +859,7 @@ class HiddingViewController: UIViewController, UIDropInteractionDelegate, MKMapV
     }
     
     func didSetHint(name: String?, hint: String?) {
+         savedMap = false
         if name != nil {
             let index2F  = listOfPoint2Seek.index(where: { (item) -> Bool in
                 item.name == name
@@ -868,6 +872,7 @@ class HiddingViewController: UIViewController, UIDropInteractionDelegate, MKMapV
 
     
     func didSetImage(name: String?, image: UIImage?) {
+         savedMap = false
         for wayPoints in mapView.annotations {
            if wayPoints.title == name {
                 let view = mapView.view(for: wayPoints)
@@ -1419,7 +1424,7 @@ private func getSECoordinate(mRect: MKMapRect) -> CLLocationCoordinate2D {
    
     func save2CloudV2(rex2S:[wayPoint]?, rex2D:[CKRecordID]?, sharing: Bool, reordered: Bool) {
         var listOfWayPointsSaved:[wayPoint]! = []
-        print("fcuk30072018 \(rex2S?.count)")
+        
         DispatchQueue.main.async {
             var p2S = 0
             for point2Save in rex2S! {
@@ -1749,7 +1754,7 @@ func fetchShare() {
                 print("error \(String(describing: error))")
             }
             for record in records! {
-                print("fcuk26062018 record \(record)")
+                
                 // there is always only a single record here!!
                 self.sharePoint = record
             }
@@ -1775,7 +1780,7 @@ func fetchShare() {
             }
 
             for record in records! {
-                print("fcuk26062018 record \(record)")
+               
                 self.buildWaypoint(record2U: record)
                 
 //                self.records2MaybeDelete.append(record.recordID)
@@ -1970,7 +1975,7 @@ func fetchShare() {
 //        if listOfPoint2Seek.count != wayPoints.count {
 //            listOfPoint2Seek = Array(wayPoints.values.map{ $0 })
 //        }
-        print("listOfPoint2Seek \(listOfPoint2Seek)")
+        
         var w2GA:[way2G] = []
         for ways in listOfPoint2Seek {
             let w2G = way2G(longitude: (ways.coordinates?.longitude)!, latitude: (ways.coordinates?.latitude)!, name: ways.name!, hint: ways.hint!, imageURL: URL(string: "http://")!)
@@ -2013,7 +2018,7 @@ func fetchShare() {
             self.spinner.startAnimating()
             UIApplication.shared.isNetworkActivityIndicatorVisible = true
         }
-        print("fcuk30072018 listOfPoint2Seek.count \(listOfPoint2Seek.count)")
+        
         save2Cloud(rex2S: listOfPoint2Seek, rex2D: nil, sharing: true, reordered: false)
         
 //        saveImage()
@@ -2169,7 +2174,7 @@ func fetchShare() {
                 }
                 let newWayPoint = wayPoint(recordID: nil, UUID: nil, major:nil, minor: nil, proximity: nil, coordinates: coordinate, name: uniqueName, hint:nil, image: nil, order: listOfPoint2Seek.count, boxes: box2F, challenge: nil, URL: nil)
                 wayPoints[uniqueName] = newWayPoint
-                print("fcuk29062018 \(wayPoints) \(uniqueName)")
+                
                 listOfPoint2Seek.append(newWayPoint)
             }
         }
@@ -2329,7 +2334,7 @@ func fetchShare() {
         }
         
         highLabel.isHidden = true
-        lowLabel.isHidden = true
+//        lowLabel.isHidden = true
         hereLabel.layer.borderWidth = 1
         hereLabel.layer.borderColor = UIColor(red:222/255, green:225/255, blue:227/255, alpha: 1).cgColor
         nearLabel.layer.borderWidth = 1
