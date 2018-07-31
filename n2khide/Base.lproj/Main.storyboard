@@ -648,6 +648,7 @@
                         <outlet property="longitudeNextLabel" destination="Zax-lQ-oNB" id="Zcf-Nb-pAp"/>
                         <outlet property="lowLabel" destination="8Qb-jJ-lNW" id="XbW-Rw-LXj"/>
                         <outlet property="mapView" destination="sLL-BY-qSg" id="Y0F-Zx-rsl"/>
+                        <outlet property="menuButton" destination="8SY-yb-OLF" id="Y0b-ag-A8b"/>
                         <outlet property="nameLabel" destination="H9l-Jh-LRi" id="cBp-Pw-diZ"/>
                         <outlet property="nearLabel" destination="U2T-XZ-kyd" id="6A2-ZA-7c7"/>
                         <outlet property="orderLabel" destination="2KP-uV-ovL" id="7o9-Ns-616"/>
@@ -656,6 +657,7 @@
                         <outlet property="plusButton" destination="7Tj-8q-gGU" id="wUA-mb-34e"/>
                         <outlet property="proximityLabel" destination="FOH-tJ-Mty" id="VdB-fa-eYD"/>
                         <outlet property="scanButton" destination="gau-6O-lj9" id="fs9-QC-2y5"/>
+                        <outlet property="shareButton" destination="hBl-mB-9A3" id="XuR-WR-dxS"/>
                         <outlet property="thereLabel" destination="ihs-P8-SpY" id="wM9-FH-Sam"/>
                         <outlet property="timerLabel" destination="436-V8-9AS" id="o6k-Mf-u0P"/>
                         <outlet property="topView" destination="8n7-vd-joa" id="U3X-Hz-WQu"/>

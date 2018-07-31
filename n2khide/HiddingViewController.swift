@@ -95,6 +95,8 @@ class HiddingViewController: UIViewController, UIDropInteractionDelegate, MKMapV
     @IBOutlet weak var topView: UIView!
     private var savedMap: Bool = true
     @IBOutlet weak var proximityLabel: UILabel!
+    @IBOutlet weak var menuButton: UIBarButtonItem!
+    @IBOutlet weak var shareButton: UIBarButtonItem!
     
     @IBOutlet weak var playButton: UIBarButtonItem!
   
@@ -1268,6 +1270,15 @@ private func getSECoordinate(mRect: MKMapRect) -> CLLocationCoordinate2D {
     
     // MARK: UIAlertController + iCloud code
     
+    func isICloudContainerAvailable()->Bool {
+        if let _ = FileManager.default.ubiquityIdentityToken {
+            return true
+        }
+        else {
+            return false
+        }
+    }
+    
     var linksRecord: CKReference!
     var mapRecord: CKRecord!
 
@@ -1898,7 +1909,7 @@ func fetchShare() {
         }
         if bonSequence != listOfPoint2Seek.count {
             DispatchQueue.main.async {
-                let alert = UIAlertController(title: "OUT OF SEQUENCE", message: "Not Shared, sequence MUST start @ zero", preferredStyle: UIAlertControllerStyle.alert)
+                let alert = UIAlertController(title: "Out Of Sequence", message: "Not Shared, sequence MUST start @ zero", preferredStyle: UIAlertControllerStyle.alert)
                 alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
                 self.present(alert, animated: true, completion: nil)
             }
@@ -2291,14 +2302,31 @@ func fetchShare() {
         }
 
 //        check internet
-                    if reachable() {
-                        print("Internet connection OK")
-                    } else {
-                        print("Internet connection FAILED")
-                          let alert = UIAlertController(title: "No Internet Connection", message: "Make sure your device is connected to the internet.", preferredStyle: .alert)
-                         alert.addAction(UIAlertAction(title: "Ok", style: .default,handler: nil))
-                         self.present(alert, animated: true, completion: nil)
-                    }
+        if reachable() {
+//            print("Internet connection OK")
+            if isICloudContainerAvailable() {
+                // do nothing
+            } else {
+                DispatchQueue.main.async() {
+                    let alert = UIAlertController(title: "AppleID Required", message: "Make sure your device is logged with an AppleID.", preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "Ok", style: .default,handler: nil))
+                    self.present(alert, animated: true, completion: nil)
+                    self.menuButton.isEnabled = false
+                    self.plusButton.isEnabled = false
+                    self.playButton.isEnabled = false
+                    self.shareButton.isEnabled = false
+                }
+            }
+        } else {
+//            print("Internet connection FAILED")
+              let alert = UIAlertController(title: "No Internet Connection", message: "Make sure your device is connected to the internet.", preferredStyle: .alert)
+             alert.addAction(UIAlertAction(title: "Ok", style: .default,handler: nil))
+             self.present(alert, animated: true, completion: nil)
+            self.menuButton.isEnabled = false
+            self.plusButton.isEnabled = false
+            self.playButton.isEnabled = false
+            self.shareButton.isEnabled = false
+        }
         
         highLabel.isHidden = true
         lowLabel.isHidden = true
@@ -2399,6 +2427,50 @@ func fetchShare() {
         }
     }
     
+    // MARK: motion
+    
+    override func motionEnded(_ motion: UIEventSubtype, with event: UIEvent?) {
+        if motion == .motionShake {
+            if reachable() {
+                if isICloudContainerAvailable() {
+                    DispatchQueue.main.async() {
+                        self.menuButton.isEnabled = true
+                        self.plusButton.isEnabled = true
+                        self.playButton.isEnabled = true
+                        self.shareButton.isEnabled = true
+                    }
+                } else {
+                    DispatchQueue.main.async() {
+                        let alert = UIAlertController(title: "AppleID Required", message: "Make sure your device is logged with an AppleID.", preferredStyle: .alert)
+                        alert.addAction(UIAlertAction(title: "Ok", style: .default,handler: nil))
+                        self.present(alert, animated: true, completion: nil)
+                        self.menuButton.isEnabled = false
+                        self.plusButton.isEnabled = false
+                        self.playButton.isEnabled = false
+                        self.shareButton.isEnabled = false
+                    }
+                }
+                DispatchQueue.main.async() {
+                    self.menuButton.isEnabled = true
+                    self.plusButton.isEnabled = true
+                    self.playButton.isEnabled = true
+                    self.shareButton.isEnabled = true
+                }
+            } else {
+                //            print("Internet connection FAILED")
+                DispatchQueue.main.async() {
+                    let alert = UIAlertController(title: "No Internet Connection", message: "Make sure your device is connected to the internet.", preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "Ok", style: .default,handler: nil))
+                    self.present(alert, animated: true, completion: nil)
+                    self.menuButton.isEnabled = false
+                    self.plusButton.isEnabled = false
+                    self.playButton.isEnabled = false
+                    self.shareButton.isEnabled = false
+                }
+            }
+        }
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         //
     }
@@ -2444,12 +2516,18 @@ func fetchShare() {
         hintLabel.isHidden = true
         latitudeNextLabel.isHidden = true
         longitudeNextLabel.isHidden = true
-        super.viewDidLoad()
+        
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         locationManager = appDelegate.locationManager
-        CKContainer.default().requestApplicationPermission(.userDiscoverability, completionHandler: {status, error in
-            print("error \(error.debugDescription)")
-        })
+//        CKContainer.default().requestApplicationPermission(.userDiscoverability, completionHandler: {status, error in
+//            let alert = UIAlertController(title: "No Cloud Connection", message: "Make sure your device is connected to the internet and logged into your AppleID.", preferredStyle: .alert)
+//                         alert.addAction(UIAlertAction(title: "Ok", style: .default,handler: nil))
+//                         self.present(alert, animated: true, completion: nil)
+//            self.menuButton.isEnabled = false
+//            self.plusButton.isEnabled = false
+//            self.playButton.isEnabled = false
+//            self.shareButton.isEnabled = false
+//        })
         locationManager?.delegate = self
         if globalUUID == nil {
             proximityLabel.isHidden = true
@@ -2461,6 +2539,7 @@ func fetchShare() {
 ////        locationManager?.allowsBackgroundLocationUpdates
 //        locationManager?.requestLocation()
         self.listAllZones()
+        
     }
     
     func timeString(time:TimeInterval) -> String {
@@ -2532,7 +2611,6 @@ func fetchShare() {
             print("Ooops! Something went wrong: \(error)")
         }
     }
-    
     
     // MARK: Constants
     
