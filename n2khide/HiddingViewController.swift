@@ -1303,7 +1303,7 @@ private func getSECoordinate(mRect: MKMapRect) -> CLLocationCoordinate2D {
         if source {
             alert2U = "Map Name"
         } else {
-            alert2U = "You NEED to define a Map Name first, nothing SAVED or SHARED"
+            alert2U = "You NEED to define a Map Name first"
         }
         let alert = UIAlertController(title: "Map Name", message: alert2U, preferredStyle: .alert)
         alert.addTextField { (textField) in
@@ -1319,6 +1319,7 @@ private func getSECoordinate(mRect: MKMapRect) -> CLLocationCoordinate2D {
                         // if you have no records in a zone, you need to go get the zone
                         self.zoneRecord2Load(zoneNamed: (textField?.text)!)
                     }
+                    
                 } else {
                     recordZone = CKRecordZone(zoneName: (textField?.text)!)
                     self.saveZone(zone2S: recordZone)
@@ -1402,9 +1403,8 @@ private func getSECoordinate(mRect: MKMapRect) -> CLLocationCoordinate2D {
             return
         }
         sharingApp = true
-        savedMap = true
       save2CloudV2(rex2S: rex2S, rex2D: rex2D, sharing: sharing, reordered: reordered)
-
+        savedMap = true
         //        var dispatchDelay = 0
         //         if sharePoint == nil {
         //            dispatchDelay = 2
@@ -1522,14 +1522,15 @@ private func getSECoordinate(mRect: MKMapRect) -> CLLocationCoordinate2D {
 //        }
         
         sharePoint?.setObject(recordZone.zoneID.zoneName as CKRecordValue, forKey: Constants.Attribute.mapName)
-//        sharePoint.setObject(recordID2Share as CKRecordValue, forKey: Constants.Attribute.wayPointsArray)
-        privateDB.save(sharePoint!) { (savedRecord, error) in
-            if error != nil {
-                print("error \(error.debugDescription)")
-            }
+//        privateDB.save(sharePoint!) { (savedRecord, error) in
+//            if error != nil {
+//                print("error \(error.debugDescription)")
+//            }
         
+//            let modifyOp = CKModifyRecordsOperation(recordsToSave:
+//                self.records2Share, recordIDsToDelete: nil)
             let modifyOp = CKModifyRecordsOperation(recordsToSave:
-                self.records2Share, recordIDsToDelete: nil)
+                [sharePoint!], recordIDsToDelete: nil)
             modifyOp.savePolicy = .changedKeys
             modifyOp.perRecordCompletionBlock = {(record,error) in
                 print("error \(error.debugDescription)")
@@ -1544,7 +1545,7 @@ private func getSECoordinate(mRect: MKMapRect) -> CLLocationCoordinate2D {
     
             }
             self.privateDB.add(modifyOp)
-        }
+//        }
         return
     }
     
@@ -2302,6 +2303,11 @@ func fetchShare() {
              let record2O = notification.userInfo!["pin"] as? CKShareMetadata
             if record2O != nil {
 //                self.queryShare(record2O!)
+                self.menuButton.isEnabled = false
+                self.plusButton.isEnabled = false
+                self.playButton.isEnabled = false
+                self.pin.isEnabled = false
+                self.scanButton.isEnabled = false
                 self.fetchParent(record2O!)
             }
         }
