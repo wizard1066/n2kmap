@@ -1303,7 +1303,7 @@ private func getSECoordinate(mRect: MKMapRect) -> CLLocationCoordinate2D {
         if source {
             alert2U = "Map Name"
         } else {
-            alert2U = "You NEED to define a Map Name first"
+            alert2U = "You NEED to define a Map Name first, nothing SHARED!"
         }
         let alert = UIAlertController(title: "Map Name", message: alert2U, preferredStyle: .alert)
         alert.addTextField { (textField) in
