@@ -196,7 +196,7 @@ class HiddingViewController: UIViewController, UIDropInteractionDelegate, MKMapV
             for box in boxes {
                 box2F.append(CLLocation(latitude: box.coordinate.latitude, longitude: box.coordinate.longitude))
             }
-            let newWayPoint = wayPoint(recordID:nil,UUID: nil, major:nil, minor: nil, proximity: nil, coordinates: userLocation, name: uniqueName, hint: hint2D, image: nil, order: wayPoints.count, boxes:box2F, challenge: nil, URL: nil)
+            let newWayPoint = wayPoint(recordID:nil,recordRecord: nil, UUID: nil, major:nil, minor: nil, proximity: nil, coordinates: userLocation, name: uniqueName, hint: hint2D, image: nil, order: wayPoints.count, boxes:box2F, challenge: nil, URL: nil)
             wayPoints[uniqueName] = newWayPoint
             listOfPoint2Seek.append(newWayPoint)
         }
@@ -420,7 +420,7 @@ class HiddingViewController: UIViewController, UIDropInteractionDelegate, MKMapV
 
                             let uniqueName = "UUID" + "-" + cMinorMajorKey
                             beaconsLogged.append(uniqueName)
-                            let newWayPoint = wayPoint(recordID:nil, UUID: globalUUID, major:closestBeacon.major as? Int, minor: closestBeacon.minor as? Int, proximity: closestBeacon.proximity, coordinates: nil, name: uniqueName, hint:nil, image: nil, order: listOfPoint2Seek.count, boxes: nil, challenge: nil,  URL: nil)
+                            let newWayPoint = wayPoint(recordID:nil, recordRecord: nil, UUID: globalUUID, major:closestBeacon.major as? Int, minor: closestBeacon.minor as? Int, proximity: closestBeacon.proximity, coordinates: nil, name: uniqueName, hint:nil, image: nil, order: listOfPoint2Seek.count, boxes: nil, challenge: nil,  URL: nil)
                             wayPoints[cMinorMajorKey] = newWayPoint
                             if cMinorMajorKey != nil {
                                 let k2U = String(closestBeacon.minor as! Int) + String(closestBeacon.major as! Int)
@@ -1111,7 +1111,7 @@ private func getSECoordinate(mRect: MKMapRect) -> CLLocationCoordinate2D {
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, didChange newState: MKAnnotationViewDragState, fromOldState oldState: MKAnnotationViewDragState) {
 //        let pinMoving = view.annotation?.title
         savedMap = false
-        //fuck
+        
         if newState == MKAnnotationViewDragState.starting {
             let index2F  = listOfPoint2Seek.index(where: { (item) -> Bool in
                 item.name == view.annotation?.title
@@ -1408,6 +1408,7 @@ private func getSECoordinate(mRect: MKMapRect) -> CLLocationCoordinate2D {
     private var operationQueue = OperationQueue()
     private var sharingApp = false
     private var records2Share:[CKRecord] = []
+    private var records2Update:[CKRecord] = []
     private var sharePoint: CKRecord?
     
 //    func mergeList(rex2S:[wayPoint]?) -> ([wayPoint]?, Int) {
@@ -1415,7 +1416,7 @@ private func getSECoordinate(mRect: MKMapRect) -> CLLocationCoordinate2D {
 //    }
     
     func save2Cloud(rex2S:[wayPoint]?, rex2D:[CKRecordID]?, sharing: Bool, reordered: Bool) {
-        
+        print("fcuk02082018 recordZone.zoneID.ownerName \(recordZone.zoneID.ownerName)")
         if recordZone == nil {
             nouveauMap(source: false)
             DispatchQueue.main.async() {
@@ -1454,21 +1455,30 @@ private func getSECoordinate(mRect: MKMapRect) -> CLLocationCoordinate2D {
             var p2S = 0
             for point2Save in rex2S! {
                 var ckWayPointRecord: CKRecord!
-                if point2Save.recordID == nil {
+                if point2Save.recordRecord == nil {
                     ckWayPointRecord = CKRecord(recordType: Constants.Entity.wayPoints, zoneID: recordZone.zoneID)
                 } else {
-                    ckWayPointRecord = CKRecord(recordType: Constants.Entity.wayPoints, recordID: point2Save.recordID!)
+//                    ckWayPointRecord = CKRecord(recordType: Constants.Entity.wayPoints, recordID: point2Save.recordID!)
+                    ckWayPointRecord = point2Save.recordRecord
                 }
-                ckWayPointRecord.setObject(point2Save.coordinates?.longitude as CKRecordValue?, forKey: Constants.Attribute.longitude)
-                ckWayPointRecord.setObject(point2Save.coordinates?.latitude as CKRecordValue?, forKey: Constants.Attribute.latitude)
+                
+                let long2F:Double = (point2Save.coordinates?.longitude)!
+                let lat2F:Double = (point2Save.coordinates?.latitude)!
+                let debugLong = point2Save.recordRecord?.object(forKey: Constants.Attribute.longitude)
+                let debugLat = point2Save.recordRecord?.object(forKey: Constants.Attribute.latitude)
+                print("fcuk02082018 debug \(debugLong) \(debugLat)")
+                print("fcuk02082018 coordinates?.longitude! \(long2F) \(lat2F)")
+                ckWayPointRecord.setObject(long2F as CKRecordValue, forKey: Constants.Attribute.longitude)
+                ckWayPointRecord.setObject(lat2F as CKRecordValue, forKey: Constants.Attribute.latitude)
                 ckWayPointRecord.setObject(point2Save.name as CKRecordValue?, forKey: Constants.Attribute.name)
                 ckWayPointRecord.setObject(point2Save.hint as CKRecordValue?, forKey: Constants.Attribute.hint)
-                ckWayPointRecord.setObject(point2Save.boxes as CKRecordValue?, forKey:  Constants.Attribute.boxes)
+                ckWayPointRecord.setObject((point2Save.boxes! as CKRecordValue), forKey:  Constants.Attribute.boxes)
                 ckWayPointRecord.setObject(point2Save.major as CKRecordValue?, forKey:  Constants.Attribute.major)
                 ckWayPointRecord.setObject(point2Save.minor as CKRecordValue?, forKey:  Constants.Attribute.minor)
                  ckWayPointRecord.setObject(point2Save.proximity?.rawValue as CKRecordValue?, forKey:  Constants.Attribute.proximity)
                 ckWayPointRecord.setObject(point2Save.UUID as CKRecordValue?, forKey: Constants.Attribute.UUID)
-                ckWayPointRecord.setObject(point2Save.challenge as CKRecordValue?, forKey: Constants.Attribute.challenge)
+                print("fcuk02082018 point2Save.challenge! \(point2Save.challenge!)")
+                ckWayPointRecord.setObject(point2Save.challenge! as CKRecordValue, forKey: Constants.Attribute.challenge)
                 ckWayPointRecord.setObject(point2Save.URL as CKRecordValue?, forKey: Constants.Attribute.URL)
                 if reordered {
                     ckWayPointRecord.setObject(point2Save.order as CKRecordValue?, forKey: Constants.Attribute.order)
@@ -1478,7 +1488,7 @@ private func getSECoordinate(mRect: MKMapRect) -> CLLocationCoordinate2D {
                 ckWayPointRecord.setParent(self.sharePoint)
                 p2S += 1
                 
-                let newWP  = wayPoint(recordID: ckWayPointRecord.recordID, UUID: point2Save.UUID, major: point2Save.major, minor: point2Save.minor, proximity: point2Save.proximity, coordinates: point2Save.coordinates, name: point2Save.name, hint: point2Save.hint, image: point2Save.image, order: point2Save.order, boxes: point2Save.boxes, challenge: point2Save.challenge, URL: point2Save.URL)
+                let newWP  = wayPoint(recordID: ckWayPointRecord.recordID, recordRecord: ckWayPointRecord, UUID: point2Save.UUID, major: point2Save.major, minor: point2Save.minor, proximity: point2Save.proximity, coordinates: point2Save.coordinates, name: point2Save.name, hint: point2Save.hint, image: point2Save.image, order: point2Save.order, boxes: point2Save.boxes, challenge: point2Save.challenge, URL: point2Save.URL)
                 listOfWayPointsSaved.append(newWP)
                 
                 var image2D: Data!
@@ -1494,13 +1504,15 @@ private func getSECoordinate(mRect: MKMapRect) -> CLLocationCoordinate2D {
                         try image2D?.write(to: file2ShareURL!, options: .atomicWrite)
                         let newAsset = CKAsset(fileURL: file2ShareURL!)
                         ckWayPointRecord.setObject(newAsset as CKAsset?, forKey: Constants.Attribute.imageData)
-                        self.records2Share.append(ckWayPointRecord)
+                            self.records2Share.append(ckWayPointRecord)
                     } catch let e as NSError {
                         print("Error! \(e)");
                         return
                     }
                 }
             }
+            
+           print("fcuk02082018 records2Share \(self.records2Share.count)")
             
             let modifyOp = CKModifyRecordsOperation(recordsToSave:
                 self.records2Share, recordIDsToDelete: rex2D)
@@ -1838,6 +1850,20 @@ func fetchShare() {
         }
     }
     
+//    private func fetchRex(recordID: CKRecordID) -> CKRecord {
+//        let fetchOperation = CKFetchRecordsOperation(recordIDs: [recordID])
+//        var record2R: CKRecord!
+//        fetchOperation.fetchRecordsCompletionBlock = {
+//            records, error in
+//            if error != nil {
+//                print("\(error!)")
+//            } else {
+//                record2R = records?.first?.value
+//            }
+//        }
+//        privateDB.add(fetchOperation)
+//    }
+    
     private func fetchParentX(recordID: CKRecordID)  {
         let fetchOperation = CKFetchRecordsOperation(recordIDs: [recordID])
         fetchOperation.fetchRecordsCompletionBlock = {
@@ -1885,7 +1911,7 @@ func fetchShare() {
             if major == nil {
                 let k2C = "\(String(describing: longitude)) \(String(describing: latitude?.description))"
                 if spotDuplicateError![k2C] == nil {
-                    let wp2S = wayPoint(recordID: record2U.recordID, UUID: nil, major:major, minor: minor, proximity: nil, coordinates: CLLocationCoordinate2D(latitude: latitude!, longitude: longitude!), name: name, hint: hint, image: image2D, order: order, boxes: boxes, challenge: challenge, URL: url2U)
+                    let wp2S = wayPoint(recordID: record2U.recordID, recordRecord: record2U, UUID: nil, major:major, minor: minor, proximity: nil, coordinates: CLLocationCoordinate2D(latitude: latitude!, longitude: longitude!), name: name, hint: hint, image: image2D, order: order, boxes: boxes, challenge: challenge, URL: url2U)
                      listOfPoint2Seek.append(wp2S)
                     let wp2S2 = wp2Search(name: name, find: nil, bon: nil)
                     listOfPoint2Search.append(wp2S2)
@@ -1895,7 +1921,7 @@ func fetchShare() {
                 let k2U = String(minor!) + String(major!)
                  if spotDuplicateError![k2U] == nil {
                     let prox2U = CLProximity(rawValue: proximity!)
-                    let wp2S = wayPoint(recordID: record2U.recordID,UUID: globalUUID, major:major, minor: minor, proximity: prox2U, coordinates: nil, name: name, hint: hint, image: image2D, order: order, boxes: nil, challenge: challenge, URL: url2U)
+                    let wp2S = wayPoint(recordID: record2U.recordID,recordRecord: record2U, UUID: globalUUID, major:major, minor: minor, proximity: prox2U, coordinates: nil, name: name, hint: hint, image: image2D, order: order, boxes: nil, challenge: challenge, URL: url2U)
                     listOfPoint2Seek.append(wp2S)
                     // set this just in case you want to define more ibeacons
                    
@@ -2199,7 +2225,7 @@ func fetchShare() {
                 for box in boxes {
                     box2F.append(CLLocation(latitude: box.coordinate.latitude, longitude: box.coordinate.longitude))
                 }
-                let newWayPoint = wayPoint(recordID: nil, UUID: nil, major:nil, minor: nil, proximity: nil, coordinates: coordinate, name: uniqueName, hint:nil, image: nil, order: listOfPoint2Seek.count, boxes: box2F, challenge: nil, URL: nil)
+                let newWayPoint = wayPoint(recordID: nil, recordRecord: nil, UUID: nil, major:nil, minor: nil, proximity: nil, coordinates: coordinate, name: uniqueName, hint:nil, image: nil, order: listOfPoint2Seek.count, boxes: box2F, challenge: nil, URL: nil)
                 wayPoints[uniqueName] = newWayPoint
                 
                 listOfPoint2Seek.append(newWayPoint)
@@ -2430,7 +2456,7 @@ func fetchShare() {
 //        CKContainer.default().sharedCloudDatabase.add(operation)
 //    }
     
-    //fuck
+    
     private func plotPin(pin2P: CKRecord, index2F: Int) {
         let UUID = pin2P.object(forKey:  Constants.Attribute.UUID) as? String
         if UUID == nil {

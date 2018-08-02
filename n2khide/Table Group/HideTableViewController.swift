@@ -172,7 +172,7 @@ class HideTableViewController: UITableViewController, UIPopoverPresentationContr
         var newOrder = 0
         var newList:[wayPoint] = []
         for e in listOfPoint2Seek  {
-            let newE = wayPoint(recordID: e.recordID, UUID: e.UUID, major: e.major, minor: e.minor, proximity: e.proximity, coordinates: e.coordinates, name: e.name, hint: e.hint, image: e.image, order: newOrder, boxes: e.boxes, challenge: e.challenge, URL: e.URL)
+            let newE = wayPoint(recordID: e.recordID, recordRecord: e.recordRecord, UUID: e.UUID, major: e.major, minor: e.minor, proximity: e.proximity, coordinates: e.coordinates, name: e.name, hint: e.hint, image: e.image, order: newOrder, boxes: e.boxes, challenge: e.challenge, URL: e.URL)
             newOrder += 1
             newList.append(newE)
         }

@@ -16,6 +16,7 @@ typealias Codable = Decodable & Encodable
 
 struct wayPoint {
         var recordID: CKRecordID?
+        var recordRecord: CKRecord?
         var UUID: String?
         var major: Int?
         var minor: Int?
