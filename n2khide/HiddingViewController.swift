@@ -530,32 +530,36 @@ class HiddingViewController: UIViewController, UIDropInteractionDelegate, MKMapV
 //    }
     
     private var OOS:[String:Int?] = [:]
+    private var meme: String?
 
     func sequence(k2U: String, alert2U: String) {
         if OOS[k2U] == nil {
             OOS[k2U] = 0
             if WP2M[k2U] != nil, codeRunState == gameplay.playing {
-                let alert = UIAlertController(title: "Sequence Jump \(alert2U) \(k2U) OOS", message:  "Do you want to SKIP ahead?", preferredStyle: UIAlertControllerStyle.alert)
-                alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { [weak alert] (_) in
-                
-                    let index2F  = listOfPoint2Search.index(where: { (item) -> Bool in
-                        item.name == alert2U
-                    })
-                    order2Search = index2F!
-                    self.updatePoint2Search(name2S: alert2U)
-                    self.judgement()
-                }))
-                alert.addAction(UIAlertAction(title: "No", style: .default,handler: nil))
-                self.present(alert, animated: true, completion: nil)
+                if k2U != meme {
+                    meme = k2U
+                    let alert = UIAlertController(title: "Sequence Jump \(alert2U) \(k2U) OOS", message:  "Do you want to SKIP ahead?", preferredStyle: UIAlertControllerStyle.alert)
+                    alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { [weak alert] (_) in
+                        
+                        let index2F  = listOfPoint2Search.index(where: { (item) -> Bool in
+                            item.name == alert2U
+                        })
+                        order2Search = index2F!
+                        self.updatePoint2Search(name2S: alert2U)
+                        self.judgement()
+                    }))
+                    alert.addAction(UIAlertAction(title: "No", style: .default,handler: nil))
+                    self.present(alert, animated: true, completion: nil)
+                }
             }
         }
         if OOS[k2U]!! < 12 {
             OOS[k2U] = OOS[k2U]!! + 1
-            
         } else {
             OOS[k2U] = nil
         }
    }
+
     
     func getLocationDegreesFrom(latitude: Double) -> String {
         var latSeconds = Int(latitude * 3600)
@@ -1106,23 +1110,34 @@ private func getSECoordinate(mRect: MKMapRect) -> CLLocationCoordinate2D {
     
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, didChange newState: MKAnnotationViewDragState, fromOldState oldState: MKAnnotationViewDragState) {
 //        let pinMoving = view.annotation?.title
-        
+        savedMap = false
+        //fuck
         if newState == MKAnnotationViewDragState.starting {
-            let wP2E = wayPoints[((view.annotation?.title)!)!]
-            
-            let boxes2D = wP2E?.boxes
-            for overlays in mapView.overlays {
-                let latitude = overlays.coordinate.latitude
-                let longitude = overlays.coordinate.longitude
-                for boxes in boxes2D! {
-                    let long2C:Double = ((boxes?.coordinate.longitude)!)
-                    let lat2C:Double = (boxes?.coordinate.latitude)!
-                    print("\(long2C) \(lat2C) \(longitude) \(latitude)")
-                    if long2C == longitude, lat2C == latitude {
-                        mapView.remove(overlays)
+            let index2F  = listOfPoint2Seek.index(where: { (item) -> Bool in
+                item.name == view.annotation?.title
+            })
+            if index2F != nil {
+                let boxes2D =  listOfPoint2Seek[index2F!].boxes
+//                listOfPoint2Seek[index2F!].boxes = box2F
+                if boxes2D != nil {
+                    for overlays in mapView.overlays {
+                        let latitude = overlays.coordinate.latitude
+                        let longitude = overlays.coordinate.longitude
+                        for boxes in boxes2D! {
+                            let long2C:Double = ((boxes?.coordinate.longitude)!)
+                            let lat2C:Double = (boxes?.coordinate.latitude)!
+                            print("\(long2C) \(lat2C) \(longitude) \(latitude)")
+                            if long2C == longitude, lat2C == latitude {
+                                mapView.remove(overlays)
+                            }
+                        }
                     }
                 }
             }
+//            let wP2E = wayPoints[((view.annotation?.title)!)!]
+//
+//            let boxes2D = wP2E?.boxes
+
         }
         if newState == MKAnnotationViewDragState.ending {
             let boxes = self.doBoxV2(latitude2D: (view.annotation?.coordinate.latitude)!, longitude2D: (view.annotation?.coordinate.longitude)!, name: ((view.annotation?.title)!)!)
@@ -1130,7 +1145,13 @@ private func getSECoordinate(mRect: MKMapRect) -> CLLocationCoordinate2D {
             for box in boxes {
                 box2F.append(CLLocation(latitude: box.coordinate.latitude, longitude: box.coordinate.longitude))
             }
-            wayPoints[((view.annotation?.title)!)!]?.boxes = box2F
+//            wayPoints[((view.annotation?.title)!)!]?.boxes = box2F
+            let index2F  = listOfPoint2Seek.index(where: { (item) -> Bool in
+                item.name == view.annotation?.title
+            })
+            if index2F != nil {
+                listOfPoint2Seek[index2F!].boxes = box2F
+            }
         }
     }
     
@@ -1483,7 +1504,7 @@ private func getSECoordinate(mRect: MKMapRect) -> CLLocationCoordinate2D {
             
             let modifyOp = CKModifyRecordsOperation(recordsToSave:
                 self.records2Share, recordIDsToDelete: rex2D)
-            modifyOp.savePolicy = .changedKeys
+            modifyOp.savePolicy = .allKeys
             modifyOp.perRecordCompletionBlock = {(record,error) in
                 print("error \(error.debugDescription)")
             }
@@ -1638,8 +1659,7 @@ private func getSECoordinate(mRect: MKMapRect) -> CLLocationCoordinate2D {
         self.topView.bringSubview(toFront: self.highLabel)
         let when = DispatchTime.now() + Double(0)
         usingMode = op.playing
-        DispatchQueue.main.asyncAfter(deadline: when){
-            self.runMode()
+        DispatchQueue.main.asyncAfter(deadline: when){            self.runMode()
         }
     }
         
@@ -1886,7 +1906,7 @@ func fetchShare() {
                     spotDuplicateError![k2U]  = true
                 }
             }
-            self.plotPin(pin2P: record2U)
+        self.plotPin(pin2P: record2U, index2F:(listOfPoint2Seek.count - 1))
         
 //            let region2M = self.region(withPins: record2U)
 //            self.addRadiusOverlay(forGeotification: record2U)
@@ -1909,6 +1929,8 @@ func fetchShare() {
             _ = confirmSequenced()
         }
     }
+    
+    
     
     private func confirmSequenced() -> Bool {
         var bonSequence = 0
@@ -2408,7 +2430,8 @@ func fetchShare() {
 //        CKContainer.default().sharedCloudDatabase.add(operation)
 //    }
     
-    private func plotPin(pin2P: CKRecord) {
+    //fuck
+    private func plotPin(pin2P: CKRecord, index2F: Int) {
         let UUID = pin2P.object(forKey:  Constants.Attribute.UUID) as? String
         if UUID == nil {
             DispatchQueue.main.async() {
@@ -2426,17 +2449,14 @@ func fetchShare() {
                 waypoint.title = name
                 waypoint.subtitle = hint
                 
-                //            if let data = NSData(contentsOf: (file?.fileURL)!) {
-                //                let image2D = UIImage(data: data as Data)
-                //                 self.mapView.addAnnotation(waypoint)
-                //                self.pinViewSelected = waypoint
-                //                self.mapView.selectAnnotation(self.pinViewSelected!, animated: true)
-                //                self.didSetImage(name: self.pinViewSelected.title, image: image2D)
-                ////                self.updateWayname(waypoint2U: waypoint, image2U: image2D)
-                //                self.mapView.deselectAnnotation(waypoint, animated: false)
-                //            } else {
-                //                self.mapView.addAnnotation(waypoint)
-                //            }
+                let boxes = self.doBoxV2(latitude2D: latitude!, longitude2D: longitude!, name: name!)
+                var box2F:[CLLocation] = []
+                for box in boxes {
+                    box2F.append(CLLocation(latitude: box.coordinate.latitude, longitude: box.coordinate.longitude))
+                }
+                if index2F > 0 {
+                    listOfPoint2Seek[index2F].boxes = box2F
+                }
                 self.mapView.addAnnotation(waypoint)
             }
         }
