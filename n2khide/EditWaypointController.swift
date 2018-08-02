@@ -74,7 +74,10 @@ class EditWaypointController: UIViewController, UIDropInteractionDelegate, UIIma
 //        present(importMenu, animated: true, completion: nil)
         let documentPicker = UIDocumentPickerViewController(documentTypes: [(kUTTypeImage as NSString) as String], in: .import)
         documentPicker.delegate = self
-        present(documentPicker, animated: true, completion: nil)
+        present(documentPicker, animated: false, completion: {
+            //done
+        })
+//        present(documentPicker, animated: true, completion: nil)
     }
     
     // MARK:- UIDocumentPickerDelegate
@@ -84,7 +87,8 @@ class EditWaypointController: UIViewController, UIDropInteractionDelegate, UIIma
 //            print(response?.suggestedFilename ?? url.lastPathComponent)
 //            print("Download Finished")
             DispatchQueue.main.async() {
-                self.setWayPoint.didSetImage(name: self.nameTextField.text, image: UIImage(data: data))
+
+                self.setWayPoint.didSetImage(name: self.nameTextField.text!, image: UIImage(data: data))
             }
         }
     }

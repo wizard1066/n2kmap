@@ -1293,11 +1293,14 @@ private func getSECoordinate(mRect: MKMapRect) -> CLLocationCoordinate2D {
 //    var records2MaybeDelete:[CKRecordID] = []
     
     @IBAction func newMap(_ sender: UIBarButtonItem) {
-        nouveauMap(source: true)
+        if recordZone   == nil {
+            nouveauMap(source: true)
+        } else {
+            plusButton.isEnabled = false
+        }
     }
     
     private func nouveauMap(source: Bool) {
-        
         usingMode = op.recording
         var alert2U: String!
         if source {
@@ -1328,6 +1331,7 @@ private func getSECoordinate(mRect: MKMapRect) -> CLLocationCoordinate2D {
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .default,handler: nil))
         self.present(alert, animated: true, completion: nil)
+        plusButton.isEnabled = false
     }
     
     // MARK: CloudSharing delegate
