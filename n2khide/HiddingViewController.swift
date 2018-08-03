@@ -1151,6 +1151,7 @@ private func getSECoordinate(mRect: MKMapRect) -> CLLocationCoordinate2D {
             })
             if index2F != nil {
                 listOfPoint2Seek[index2F!].boxes = box2F
+                listOfPoint2Seek[index2F!].coordinates = view.annotation?.coordinate
             }
         }
     }
@@ -1447,6 +1448,35 @@ private func getSECoordinate(mRect: MKMapRect) -> CLLocationCoordinate2D {
         //        }
     }
     
+    func fetchNSave(recordID: CKRecordID, wp2S: wayPoint) {
+        privateDB.fetch(withRecordID: recordID, completionHandler: { (record, error) in
+            if error != nil {
+                print("Error fetching record: \(error?.localizedDescription)")
+            } else {
+                // Now you have grabbed your existing record from iCloud
+                // Apply whatever changes you want
+//                record.setObject(aValue, forKey: attributeToChange)
+                let long2F:Double = (wp2S.coordinates?.longitude)!
+                let lat2F:Double = (wp2S.coordinates?.latitude)!
+                
+                print("fcuk03082018 Before \(record?.object(forKey: Constants.Attribute.longitude)) \(record?.object(forKey: Constants.Attribute.latitude))")
+                
+                record?.setObject(long2F as CKRecordValue, forKey: Constants.Attribute.longitude)
+                record?.setObject(lat2F as CKRecordValue, forKey: Constants.Attribute.latitude)
+                
+               print("fcuk03082018 After \(record?.object(forKey: Constants.Attribute.longitude)) \(record?.object(forKey: Constants.Attribute.latitude))")
+                // Save this record again
+                self.privateDB.save(record!, completionHandler: { (savedRecord, saveError) in
+                    if saveError != nil {
+                        print("Error saving record: \(saveError?.localizedDescription)")
+                    } else {
+                        print("Successfully updated record!")
+                    }
+                })
+            }
+        })
+    }
+    
    
     func save2CloudV2(rex2S:[wayPoint]?, rex2D:[CKRecordID]?, sharing: Bool, reordered: Bool) {
         var listOfWayPointsSaved:[wayPoint]! = []
@@ -1454,12 +1484,14 @@ private func getSECoordinate(mRect: MKMapRect) -> CLLocationCoordinate2D {
         DispatchQueue.main.async {
             var p2S = 0
             for point2Save in rex2S! {
+               
                 var ckWayPointRecord: CKRecord!
                 if point2Save.recordRecord == nil {
                     ckWayPointRecord = CKRecord(recordType: Constants.Entity.wayPoints, zoneID: recordZone.zoneID)
                 } else {
 //                    ckWayPointRecord = CKRecord(recordType: Constants.Entity.wayPoints, recordID: point2Save.recordID!)
                     ckWayPointRecord = point2Save.recordRecord
+                    self.fetchNSave(recordID: point2Save.recordID!, wp2S: point2Save)
                 }
                 
                 let long2F:Double = (point2Save.coordinates?.longitude)!
@@ -1504,7 +1536,7 @@ private func getSECoordinate(mRect: MKMapRect) -> CLLocationCoordinate2D {
                         try image2D?.write(to: file2ShareURL!, options: .atomicWrite)
                         let newAsset = CKAsset(fileURL: file2ShareURL!)
                         ckWayPointRecord.setObject(newAsset as CKAsset?, forKey: Constants.Attribute.imageData)
-                            self.records2Share.append(ckWayPointRecord)
+//                            self.records2Share.append(ckWayPointRecord)
                     } catch let e as NSError {
                         print("Error! \(e)");
                         return
