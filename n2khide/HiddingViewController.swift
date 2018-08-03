@@ -1417,7 +1417,7 @@ private func getSECoordinate(mRect: MKMapRect) -> CLLocationCoordinate2D {
 //    }
     
     func save2Cloud(rex2S:[wayPoint]?, rex2D:[CKRecordID]?, sharing: Bool, reordered: Bool) {
-        print("fcuk02082018 recordZone.zoneID.ownerName \(recordZone.zoneID.ownerName)")
+//        print("fcuk02082018 recordZone.zoneID.ownerName \(recordZone.zoneID.ownerName)")
         if recordZone == nil {
             nouveauMap(source: false)
             DispatchQueue.main.async() {
@@ -1509,8 +1509,8 @@ private func getSECoordinate(mRect: MKMapRect) -> CLLocationCoordinate2D {
                 ckWayPointRecord.setObject(point2Save.minor as CKRecordValue?, forKey:  Constants.Attribute.minor)
                  ckWayPointRecord.setObject(point2Save.proximity?.rawValue as CKRecordValue?, forKey:  Constants.Attribute.proximity)
                 ckWayPointRecord.setObject(point2Save.UUID as CKRecordValue?, forKey: Constants.Attribute.UUID)
-                print("fcuk02082018 point2Save.challenge! \(point2Save.challenge!)")
-                ckWayPointRecord.setObject(point2Save.challenge! as CKRecordValue, forKey: Constants.Attribute.challenge)
+                
+                ckWayPointRecord.setObject(point2Save.challenge as CKRecordValue?, forKey: Constants.Attribute.challenge)
                 ckWayPointRecord.setObject(point2Save.URL as CKRecordValue?, forKey: Constants.Attribute.URL)
                 if reordered {
                     ckWayPointRecord.setObject(point2Save.order as CKRecordValue?, forKey: Constants.Attribute.order)
