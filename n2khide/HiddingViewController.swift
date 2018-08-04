@@ -670,7 +670,7 @@ class HiddingViewController: UIViewController, UIDropInteractionDelegate, MKMapV
                     let k2U = latValue + longValue
                     let  alert2Post = WP2M[k2U]
                     
-                    if alert2Post == nextWP2S.name, usingMode == op.playing, codeRunState == gameplay.playing {
+                    if alert2Post == nextWP2S.name, usingMode == op.playing, (codeRunState == gameplay.playing || codeRunState == gameplay.finished) {
                         self.updatePoint2Search(name2S: nextWP2S.name!)
                         if nextWP2S.URL != nil {
                             if self.presentedViewController?.contents != WebViewController() {
