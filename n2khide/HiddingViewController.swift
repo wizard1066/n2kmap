@@ -1316,9 +1316,27 @@ private func getSECoordinate(mRect: MKMapRect) -> CLLocationCoordinate2D {
     
     @IBAction func newMap(_ sender: UIBarButtonItem) {
         if recordZone   == nil {
+            shareButton.isEnabled = false
+            playButton.isEnabled = false
             nouveauMap(source: true)
         } else {
-            plusButton.isEnabled = false
+//            plusButton.isEnabled = false
+            for rework in 0..<listOfPoint2Seek.count {
+                listOfPoint2Seek[rework].recordID = nil
+                listOfPoint2Seek[rework].recordRecord = nil
+            }
+            shareButton.isEnabled = false
+            playButton.isEnabled = false
+            nouveauMap(source: true)
+        }
+    }
+    
+    var resetShareNPlay: Bool? {
+        willSet {
+            DispatchQueue.main.async {
+                self.shareButton.isEnabled = true
+                self.playButton.isEnabled = true
+            }
         }
     }
     
@@ -1344,9 +1362,9 @@ private func getSECoordinate(mRect: MKMapRect) -> CLLocationCoordinate2D {
                         // if you have no records in a zone, you need to go get the zone
                         self.zoneRecord2Load(zoneNamed: (textField?.text)!)
                     }
-                    
                 } else {
                     recordZone = CKRecordZone(zoneName: (textField?.text)!)
+                   
                     self.saveZone(zone2S: recordZone)
                 }
             }
@@ -1366,8 +1384,9 @@ private func getSECoordinate(mRect: MKMapRect) -> CLLocationCoordinate2D {
             } else {
                 // Zone creation succeeded
                 recordZone = returnRecord
+                self.doshare(rexShared: nil, withoutSavingChildren: true)
                 
-                self.doshare(rexShared: nil)
+//                self.doshare(rexShared: nil)
             }
         }))
     }
@@ -1491,15 +1510,12 @@ private func getSECoordinate(mRect: MKMapRect) -> CLLocationCoordinate2D {
                 } else {
 //                    ckWayPointRecord = CKRecord(recordType: Constants.Entity.wayPoints, recordID: point2Save.recordID!)
                     ckWayPointRecord = point2Save.recordRecord
-                    self.fetchNSave(recordID: point2Save.recordID!, wp2S: point2Save)
+//                    self.fetchNSave(recordID: point2Save.recordID!, wp2S: point2Save)
                 }
                 
                 let long2F:Double = (point2Save.coordinates?.longitude)!
                 let lat2F:Double = (point2Save.coordinates?.latitude)!
-                let debugLong = point2Save.recordRecord?.object(forKey: Constants.Attribute.longitude)
-                let debugLat = point2Save.recordRecord?.object(forKey: Constants.Attribute.latitude)
-                print("fcuk02082018 debug \(debugLong) \(debugLat)")
-                print("fcuk02082018 coordinates?.longitude! \(long2F) \(lat2F)")
+
                 ckWayPointRecord.setObject(long2F as CKRecordValue, forKey: Constants.Attribute.longitude)
                 ckWayPointRecord.setObject(lat2F as CKRecordValue, forKey: Constants.Attribute.latitude)
                 ckWayPointRecord.setObject(point2Save.name as CKRecordValue?, forKey: Constants.Attribute.name)
@@ -1536,7 +1552,7 @@ private func getSECoordinate(mRect: MKMapRect) -> CLLocationCoordinate2D {
                         try image2D?.write(to: file2ShareURL!, options: .atomicWrite)
                         let newAsset = CKAsset(fileURL: file2ShareURL!)
                         ckWayPointRecord.setObject(newAsset as CKAsset?, forKey: Constants.Attribute.imageData)
-//                            self.records2Share.append(ckWayPointRecord)
+                            self.records2Share.append(ckWayPointRecord)
                     } catch let e as NSError {
                         print("Error! \(e)");
                         return
@@ -1575,7 +1591,7 @@ private func getSECoordinate(mRect: MKMapRect) -> CLLocationCoordinate2D {
     }
         
         // new code added for parent setup 2nd try
-    func doshare(rexShared: [CKRecord]?) {
+    func doshare(rexShared: [CKRecord]?, withoutSavingChildren: Bool) {
         
 //        if listOfPoint2Seek.count == 0 {
             sharePoint = CKRecord(recordType: Constants.Entity.mapLinks, zoneID: recordZone.zoneID)
@@ -1610,8 +1626,8 @@ private func getSECoordinate(mRect: MKMapRect) -> CLLocationCoordinate2D {
                     print("error \(error.debugDescription)")
                 }
 //                self.sharing(record2S: self.sharePoint)
-                self.save2CloudV2(rex2S: listOfPoint2Seek, rex2D: nil, sharing: false, reordered: false)
-    
+//                self.save2CloudV2(rex2S: listOfPoint2Seek, rex2D: nil, sharing: false, reordered: false)
+                self.resetShareNPlay = true
             }
             self.privateDB.add(modifyOp)
 //        }
@@ -1826,6 +1842,7 @@ func fetchShare() {
                 
                 // there is always only a single record here!!
                 self.sharePoint = record
+                self.resetShareNPlay = true
             }
         }
     }
@@ -2387,7 +2404,7 @@ func fetchShare() {
              let record2O = notification.userInfo!["pin"] as? CKShareMetadata
             if record2O != nil {
 //                self.queryShare(record2O!)
-                self.menuButton.isEnabled = false
+//                self.menuButton.isEnabled = false
                 self.plusButton.isEnabled = false
                 self.playButton.isEnabled = false
                 self.pin.isEnabled = false
@@ -2618,8 +2635,8 @@ func fetchShare() {
 //                         self.present(alert, animated: true, completion: nil)
 //            self.menuButton.isEnabled = false
 //            self.plusButton.isEnabled = false
-//            self.playButton.isEnabled = false
-//            self.shareButton.isEnabled = false
+            self.playButton.isEnabled = false
+            self.shareButton.isEnabled = false
 //        })
         locationManager?.delegate = self
         if globalUUID == nil {

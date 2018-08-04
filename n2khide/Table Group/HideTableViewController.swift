@@ -164,6 +164,9 @@ class HideTableViewController: UITableViewController, UIPopoverPresentationContr
     }
     
     @objc func byebye() {
+        if listOfPoint2Seek.count > 0 {
+            me.resetShareNPlay = true
+        }
         self.dismiss(animated: true, completion: nil)
     }
     
