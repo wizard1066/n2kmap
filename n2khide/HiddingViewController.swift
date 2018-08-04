@@ -191,7 +191,7 @@ class HiddingViewController: UIViewController, UIDropInteractionDelegate, MKMapV
             waypoint2.subtitle = nil
             
             mapView.addAnnotation(waypoint2)
-             let boxes = self.doBoxV2(latitude2D: waypoint2.coordinate.latitude, longitude2D: waypoint2.coordinate.longitude, name: uniqueName)
+            let boxes = self.doBoxV2(latitude2D: waypoint2.coordinate.latitude, longitude2D: waypoint2.coordinate.longitude, name: uniqueName, add2Map: true)
             var box2F:[CLLocation] = []
             for box in boxes {
                 box2F.append(CLLocation(latitude: box.coordinate.latitude, longitude: box.coordinate.longitude))
@@ -997,7 +997,7 @@ private func getSECoordinate(mRect: MKMapRect) -> CLLocationCoordinate2D {
         return polygon
     }
     
-    private func doBoxV2(latitude2D: Double, longitude2D: Double, name: String) -> [MKOverlay]
+    private func doBoxV2(latitude2D: Double, longitude2D: Double, name: String, add2Map: Bool) -> [MKOverlay]
     {
         var boxes2R:[CLLocation] = []
         var boxes2S:[MKOverlay] = []
@@ -1084,9 +1084,11 @@ private func getSECoordinate(mRect: MKMapRect) -> CLLocationCoordinate2D {
         if cords2D.count == 4 {
              let polygon:MKOverlay = MKPolygon(coordinates: &cords2D, count: cords2D.count)
             boxes2S.append(polygon)
-            DispatchQueue.main.async {
-                self.polyColor = UIColor.black
-                self.mapView.add(polygon, level: MKOverlayLevel.aboveRoads)
+            if add2Map {
+                DispatchQueue.main.async {
+                    self.polyColor = UIColor.black
+                    self.mapView.add(polygon, level: MKOverlayLevel.aboveRoads)
+                }
             }
         }
         return boxes2S
@@ -1140,7 +1142,7 @@ private func getSECoordinate(mRect: MKMapRect) -> CLLocationCoordinate2D {
 
         }
         if newState == MKAnnotationViewDragState.ending {
-            let boxes = self.doBoxV2(latitude2D: (view.annotation?.coordinate.latitude)!, longitude2D: (view.annotation?.coordinate.longitude)!, name: ((view.annotation?.title)!)!)
+            let boxes = self.doBoxV2(latitude2D: (view.annotation?.coordinate.latitude)!, longitude2D: (view.annotation?.coordinate.longitude)!, name: ((view.annotation?.title)!)!, add2Map: true)
             var box2F:[CLLocation] = []
             for box in boxes {
                 box2F.append(CLLocation(latitude: box.coordinate.latitude, longitude: box.coordinate.longitude))
@@ -1241,7 +1243,7 @@ private func getSECoordinate(mRect: MKMapRect) -> CLLocationCoordinate2D {
                 order2Search = order2U
                 self.performSegue(withIdentifier: Constants.ShowImageSegue, sender: self.view)
             }
-        } else if control == view.rightCalloutAccessoryView {
+        } else if control == view.rightCalloutAccessoryView, usingMode != .playing {
             mapView.deselectAnnotation(view.annotation, animated: false)
             performSegue(withIdentifier: Constants.EditUserWaypoint, sender: view)
         }
@@ -2269,7 +2271,7 @@ func fetchShare() {
             DispatchQueue.main.async() {
                 self.mapView.addAnnotation(waypoint2)
 //                self.doBox(latitude2S: wp2FLat, longitude2S: wp2FLog)
-                let boxes = self.doBoxV2(latitude2D: coordinate.latitude, longitude2D: coordinate.longitude, name: uniqueName)
+                let boxes = self.doBoxV2(latitude2D: coordinate.latitude, longitude2D: coordinate.longitude, name: uniqueName, add2Map: true)
                 var box2F:[CLLocation] = []
                 for box in boxes {
                     box2F.append(CLLocation(latitude: box.coordinate.latitude, longitude: box.coordinate.longitude))
@@ -2524,7 +2526,7 @@ func fetchShare() {
                 waypoint.title = name
                 waypoint.subtitle = hint
                 
-                let boxes = self.doBoxV2(latitude2D: latitude!, longitude2D: longitude!, name: name!)
+                let boxes = self.doBoxV2(latitude2D: latitude!, longitude2D: longitude!, name: name!, add2Map: false)
                 var box2F:[CLLocation] = []
                 for box in boxes {
                     box2F.append(CLLocation(latitude: box.coordinate.latitude, longitude: box.coordinate.longitude))
