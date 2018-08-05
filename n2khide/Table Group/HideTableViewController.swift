@@ -381,6 +381,9 @@ class HideTableViewController: UITableViewController, UIPopoverPresentationContr
                 self.performSegue(withIdentifier: Constants.ShowImageSegue, sender: self.view)
             }
         }
+        if windowView == .points, usingMode == op.playing {
+            order2Search = indexPath.row
+        }
     }
 
     

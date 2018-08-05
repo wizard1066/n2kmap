@@ -98,6 +98,7 @@ class HiddingViewController: UIViewController, UIDropInteractionDelegate, MKMapV
     @IBOutlet weak var menuButton: UIBarButtonItem!
     @IBOutlet weak var shareButton: UIBarButtonItem!
     
+    @IBOutlet weak var compassRing: UIImageView!
     @IBOutlet weak var playButton: UIBarButtonItem!
   
     @IBOutlet weak var thereLabel: UIImageView!
@@ -277,6 +278,9 @@ class HiddingViewController: UIViewController, UIDropInteractionDelegate, MKMapV
                 self.centerImage.transform = tr2
                 self.directionLabel.text = String(Int(degree2S))
                 self.directionLabel.isHidden = false
+                let trueNorth = CGFloat(self.angle2U!)
+                let tr1 = CGAffineTransform.identity.rotated(by: trueNorth)
+                self.compassRing.transform = tr1
             }
         }
     }
@@ -531,6 +535,7 @@ class HiddingViewController: UIViewController, UIDropInteractionDelegate, MKMapV
     
     private var OOS:[String:Int?] = [:]
     private var meme: String?
+    private var prememe: String?
 
     func sequence(k2U: String, alert2U: String) {
         if OOS[k2U] == nil {
@@ -1575,6 +1580,11 @@ private func getSECoordinate(mRect: MKMapRect) -> CLLocationCoordinate2D {
                 if error != nil {
                     print("error \(error.debugDescription)")
                 }
+                
+                for rex in record! {
+                    let rex2U = listOfWayPointsSaved.filter { $0.order == rex.object(forKey:  Constants.Attribute.order) as? Int }
+                    listOfWayPointsSaved[(rex2U.first?.order)!].recordRecord = rex
+                }
                 DispatchQueue.main.async() {
                     if self.spinner != nil {
                         self.spinner.stopAnimating()
@@ -1762,6 +1772,7 @@ func fetchShare() {
         usingMode = op.playing
         mapView.alpha = 0.7
         centerImage.image = UIImage(named: "compassClip")
+        compassRing.image = UIImage(named: "compassRing")
         if mode2D {
             listOfPoint2Seek = []
             listOfPoint2Search = []
@@ -2425,7 +2436,7 @@ func fetchShare() {
                     let alert = UIAlertController(title: "AppleID Required", message: "Make sure your device is logged with an AppleID.", preferredStyle: .alert)
                     alert.addAction(UIAlertAction(title: "Ok", style: .default,handler: nil))
                     self.present(alert, animated: true, completion: nil)
-                    self.menuButton.isEnabled = false
+//                    self.menuButton.isEnabled = false
                     self.plusButton.isEnabled = false
                     self.playButton.isEnabled = false
                     self.shareButton.isEnabled = false
@@ -2436,7 +2447,7 @@ func fetchShare() {
               let alert = UIAlertController(title: "No Internet Connection", message: "Make sure your device is connected to the internet.", preferredStyle: .alert)
              alert.addAction(UIAlertAction(title: "Ok", style: .default,handler: nil))
              self.present(alert, animated: true, completion: nil)
-            self.menuButton.isEnabled = false
+//            self.menuButton.isEnabled = false
             self.plusButton.isEnabled = false
             self.playButton.isEnabled = false
             self.shareButton.isEnabled = false
@@ -2628,6 +2639,7 @@ func fetchShare() {
         hintLabel.isHidden = true
         latitudeNextLabel.isHidden = true
         longitudeNextLabel.isHidden = true
+        nameLabel.backgroundColor = UIColor.clear
         
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         locationManager = appDelegate.locationManager
