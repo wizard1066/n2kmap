@@ -383,6 +383,10 @@ class HideTableViewController: UITableViewController, UIPopoverPresentationContr
         }
         if windowView == .points, usingMode == op.playing {
             order2Search = indexPath.row
+             let image2U = listOfPoint2Seek[indexPath.row].image
+            if image2U != nil {
+                self.performSegue(withIdentifier: Constants.ShowImageSegue, sender: self.view)
+            }
         }
     }
 

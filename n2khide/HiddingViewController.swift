@@ -81,7 +81,7 @@ class HiddingViewController: UIViewController, UIDropInteractionDelegate, MKMapV
     @IBOutlet weak var latitudeNextLabel: UILabel!
     @IBOutlet weak var lowLabel: UILabel!
     @IBOutlet weak var highLabel: UILabel!
-    @IBOutlet weak var directionLabel: UILabel!
+  
     @IBOutlet weak var hintLabel: UILabel!
     @IBOutlet weak var orderLabel: UILabel!
     @IBOutlet weak var nameLabel: UILabel!
@@ -276,11 +276,11 @@ class HiddingViewController: UIViewController, UIDropInteractionDelegate, MKMapV
                 let tr2 = CGAffineTransform.identity.rotated(by: direction2GN)
                 let degree2S = self.radiansToDegrees(radians: Double(direction2GN))
                 self.centerImage.transform = tr2
-                self.directionLabel.text = String(Int(degree2S))
-                self.directionLabel.isHidden = false
-                let trueNorth = CGFloat(self.angle2U!)
+                
+                let trueNorth = CGFloat(direction2G)
                 let tr1 = CGAffineTransform.identity.rotated(by: trueNorth)
                 self.compassRing.transform = tr1
+                
             }
         }
     }
@@ -1800,6 +1800,7 @@ func fetchShare() {
             self.mapView.alpha = 0.7
             listOfPoint2Seek = []
             self.centerImage.image = UIImage(named: "compassClip")
+            self.compassRing.image = UIImage(named: "compassRing")
         }
         recordZoneID = zoneID
         let predicate = NSPredicate(value: true)
@@ -2067,11 +2068,14 @@ func fetchShare() {
                 self.nameLabel.isHidden = false
                 self.latitudeNextLabel.isHidden = false
                 self.longitudeNextLabel.isHidden = false
+                self.compassRing.isHidden = false
                 self.highLabel.text = " < You need to be here >"
                 self.centerImage.image = UIImage(named: "compassClip")
+                self.compassRing.image = UIImage(named: "compassRing")
             } else {
                     // you have a beacon record
                     self.centerImage.image = UIImage(named: "ibeacon-logo")
+                    self.compassRing.isHidden = true
                     self.hintLabel.text = nextWP2S.hint
                     self.nameLabel.text = nextWP2S.name
                     self.hintLabel.isHidden = false
@@ -2567,7 +2571,7 @@ func fetchShare() {
                         let alert = UIAlertController(title: "AppleID Required", message: "Make sure your device is logged with an AppleID.", preferredStyle: .alert)
                         alert.addAction(UIAlertAction(title: "Ok", style: .default,handler: nil))
                         self.present(alert, animated: true, completion: nil)
-                        self.menuButton.isEnabled = false
+//                        self.menuButton.isEnabled = false
                         self.plusButton.isEnabled = false
                         self.playButton.isEnabled = false
                         self.shareButton.isEnabled = false
@@ -2585,7 +2589,7 @@ func fetchShare() {
                     let alert = UIAlertController(title: "No Internet Connection", message: "Make sure your device is connected to the internet.", preferredStyle: .alert)
                     alert.addAction(UIAlertAction(title: "Ok", style: .default,handler: nil))
                     self.present(alert, animated: true, completion: nil)
-                    self.menuButton.isEnabled = false
+//                    self.menuButton.isEnabled = false
                     self.plusButton.isEnabled = false
                     self.playButton.isEnabled = false
                     self.shareButton.isEnabled = false
@@ -2634,7 +2638,7 @@ func fetchShare() {
         cleanup()
         trigger = point.gps
         centerImage.alpha = 0.5
-        directionLabel.isHidden = true
+        
         nameLabel.isHidden = true
         hintLabel.isHidden = true
         latitudeNextLabel.isHidden = true
