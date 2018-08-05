@@ -664,6 +664,7 @@ class HiddingViewController: UIViewController, UIDropInteractionDelegate, MKMapV
         currentLocation = locations.first
 
         DispatchQueue.main.async {
+ 
             let longValue =  self.getLocationDegreesFrom(longitude: (self.locationManager?.location?.coordinate.longitude)!)
             let latValue = self.getLocationDegreesFrom(latitude: (self.locationManager?.location?.coordinate.latitude)!)
             self.longitudeLabel.text = self.getLocationDegreesFrom(longitude: (self.locationManager?.location?.coordinate.longitude)!)
@@ -2394,16 +2395,7 @@ func fetchShare() {
         self.locationManager?.startUpdatingHeading()
         self.locationManager?.requestLocation()
         self.startScanning()
-        let when = DispatchTime.now() + Double(8)
-        DispatchQueue.main.asyncAfter(deadline: when){
-            if self.currentLocation != nil {
-                let span: MKCoordinateSpan = MKCoordinateSpanMake(0.01, 0.01)
-                let userLocation: CLLocationCoordinate2D = CLLocationCoordinate2DMake(self.currentLocation!.coordinate.latitude, self.currentLocation!.coordinate.longitude)
-                let region: MKCoordinateRegion = MKCoordinateRegionMake(userLocation, span)
-                self.mapView.setRegion(region, animated: true)
-                self.regionHasBeenCentered = true
-            }
-        }
+        
 
         let center = NotificationCenter.default
         let queue = OperationQueue.main
@@ -2667,6 +2659,18 @@ func fetchShare() {
 ////        locationManager?.allowsBackgroundLocationUpdates
 //        locationManager?.requestLocation()
         self.listAllZones()
+        
+        let when = DispatchTime.now() + Double(8)
+        DispatchQueue.main.asyncAfter(deadline: when){
+            if self.currentLocation != nil {
+                let span: MKCoordinateSpan = MKCoordinateSpanMake(0.01, 0.01)
+                let userLocation: CLLocationCoordinate2D = CLLocationCoordinate2DMake(self.currentLocation!.coordinate.latitude, self.currentLocation!.coordinate.longitude)
+                let region: MKCoordinateRegion = MKCoordinateRegionMake(userLocation, span)
+                self.mapView.setRegion(region, animated: true)
+                self.regionHasBeenCentered = true
+                self.mapView.userTrackingMode = .followWithHeading
+            }
+        }
         
     }
     

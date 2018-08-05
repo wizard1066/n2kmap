@@ -381,8 +381,9 @@ class HideTableViewController: UITableViewController, UIPopoverPresentationContr
                 self.performSegue(withIdentifier: Constants.ShowImageSegue, sender: self.view)
             }
         }
-        if windowView == .points, usingMode == op.playing {
-            order2Search = indexPath.row
+        if windowView == .playing, usingMode == op.playing {
+//            order2Search = indexPath.row
+            self.classIndexPath = indexPath
              let image2U = listOfPoint2Seek[indexPath.row].image
             if image2U != nil {
                 self.performSegue(withIdentifier: Constants.ShowImageSegue, sender: self.view)
@@ -394,10 +395,19 @@ class HideTableViewController: UITableViewController, UIPopoverPresentationContr
     override func tableView(_ tableView: UITableView,
                    leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration?
     {
-        if windowView == .playing || usingMode == op.playing {
-            return nil
-        }
         var closeAction: UIContextualAction!
+        if windowView == .playing, usingMode == op.playing {
+            closeAction = UIContextualAction(style: .normal, title:  "Reset", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
+                if windowView == .playing {
+                    //rint("OK, marked as Closed")
+                    order2Search = indexPath.row
+                    success(true)
+                }
+            })
+            closeAction?.image = UIImage(named: "tick")
+            closeAction?.backgroundColor = .orange
+        }
+//        var closeAction: UIContextualAction!
         if windowView == .points {
             closeAction = UIContextualAction(style: .normal, title:  "Update", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
                  if windowView == .points {
