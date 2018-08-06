@@ -558,7 +558,7 @@ class HiddingViewController: UIViewController, UIDropInteractionDelegate, MKMapV
                 }
             }
         }
-        if OOS[k2U]!! < 12 {
+        if OOS[k2U]!! < 24 {
             OOS[k2U] = OOS[k2U]!! + 1
         } else {
             OOS[k2U] = nil
