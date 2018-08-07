@@ -1475,97 +1475,108 @@ private func getSECoordinate(mRect: MKMapRect) -> CLLocationCoordinate2D {
         //        }
     }
     
-    func fetchNSave(recordID: CKRecordID, wp2S: wayPoint) {
-        privateDB.fetch(withRecordID: recordID, completionHandler: { (record, error) in
-            if error != nil {
-                print("Error fetching record: \(error?.localizedDescription)")
+    func fetchNSave(wp2S: wayPoint, p2S: Int, reorder: Bool) {
+        if wp2S.recordID == nil {
+            let record = CKRecord(recordType: Constants.Entity.wayPoints, zoneID: recordZone.zoneID)
+            let record2S = self.setRecord(wp2S: wp2S, record: record, p2S: p2S, reorder: reorder)
+            self.saveRecord(record2S: record2S)
+        } else {
+                privateDB.fetch(withRecordID: recordID!, completionHandler: { (record, error) in
+                    if error != nil {
+                        print("Error fetching record: \(error?.localizedDescription)")
+                } else {
+                    let record2S = self.setRecord(wp2S: wp2S, record: record, p2S: p2S, reorder: reorder)
+                    self.saveRecord(record2S: record2S)
+    //                let newWP  = wayPoint(recordID: wp2S.recordID, recordRecord:savedRecord , UUID: wp2S.UUID, major: wp2S.major, minor: wp2S.minor, proximity: wp2S.proximity, coordinates: wp2S.coordinates, name: wp2S.name, hint: wp2S.hint, image: wp2S.image, order: wp2S.order, boxes: wp2S.boxes, challenge: wp2S.challenge, URL: wp2S.URL)
+    //                listOfWayPointsSaved.append(newWP)
+                    // Save this record again
+                }
+            })
+        }
+    }
+    
+    func saveRecord(record2S: CKRecord) {
+        self.privateDB.save(record2S, completionHandler: { (savedRecord, saveError) in
+            if saveError != nil {
+                print("Error saving record: \(saveError?.localizedDescription)")
             } else {
-                // Now you have grabbed your existing record from iCloud
-                // Apply whatever changes you want
-//                record.setObject(aValue, forKey: attributeToChange)
-                let long2F:Double = (wp2S.coordinates?.longitude)!
-                let lat2F:Double = (wp2S.coordinates?.latitude)!
-                
-                print("fcuk03082018 Before \(record?.object(forKey: Constants.Attribute.longitude)) \(record?.object(forKey: Constants.Attribute.latitude))")
-                
-                record?.setObject(long2F as CKRecordValue, forKey: Constants.Attribute.longitude)
-                record?.setObject(lat2F as CKRecordValue, forKey: Constants.Attribute.latitude)
-                
-               print("fcuk03082018 After \(record?.object(forKey: Constants.Attribute.longitude)) \(record?.object(forKey: Constants.Attribute.latitude))")
-                // Save this record again
-                self.privateDB.save(record!, completionHandler: { (savedRecord, saveError) in
-                    if saveError != nil {
-                        print("Error saving record: \(saveError?.localizedDescription)")
-                    } else {
-                        print("Successfully updated record!")
-                    }
-                })
+                print("Successfully updated record!")
             }
         })
+    }
+    
+    func setRecord(wp2S: wayPoint, record:CKRecord?, p2S:Int, reorder: Bool) -> CKRecord {
+        let long2F:Double = (wp2S.coordinates?.longitude)!
+        let lat2F:Double = (wp2S.coordinates?.latitude)!
+        record?.setObject(long2F as CKRecordValue, forKey: Constants.Attribute.longitude)
+        record?.setObject(lat2F as CKRecordValue, forKey: Constants.Attribute.latitude)
+        record?.setObject(wp2S.name as CKRecordValue?, forKey: Constants.Attribute.name)
+        record?.setObject(wp2S.hint as CKRecordValue?, forKey: Constants.Attribute.hint)
+        record?.setObject((wp2S.boxes! as CKRecordValue), forKey:  Constants.Attribute.boxes)
+        record?.setObject(wp2S.major as CKRecordValue?, forKey:  Constants.Attribute.major)
+        record?.setObject(wp2S.minor as CKRecordValue?, forKey:  Constants.Attribute.minor)
+        record?.setObject(wp2S.proximity?.rawValue as CKRecordValue?, forKey:  Constants.Attribute.proximity)
+        record?.setObject(wp2S.UUID as CKRecordValue?, forKey: Constants.Attribute.UUID)
+        record?.setObject(wp2S.challenge as CKRecordValue?, forKey: Constants.Attribute.challenge)
+        record?.setObject(wp2S.URL as CKRecordValue?, forKey: Constants.Attribute.URL)
+        if reorder {
+            record?.setObject(wp2S.order as CKRecordValue?, forKey: Constants.Attribute.order)
+        } else {
+            record?.setObject(p2S as CKRecordValue?, forKey: Constants.Attribute.order)
+        }
+        record?.setParent(self.sharePoint)
+        let data2U = self.returnImage2U(image2U: wp2S)
+        if let _ = wp2S.name {
+            let file2ShareURL = NSURL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(NSUUID().uuidString+".dat")
+            do {
+                try data2U.write(to: file2ShareURL!, options: .atomicWrite)
+                let newAsset = CKAsset(fileURL: file2ShareURL!)
+                record?.setObject(newAsset as CKAsset?, forKey: Constants.Attribute.imageData)
+                self.records2Share.append(record!)
+            } catch let e as NSError {
+                print("Error! \(e)");
+            }
+        }
+        return record!
+    }
+    
+    func returnImage2U(image2U:wayPoint?) -> Data {
+        var image2D: Data!
+        if image2U?.image != nil {
+            let newImage = image2U?.image?.resize(size: CGSize(width: 1080, height: 1920))
+            image2D = UIImageJPEGRepresentation(newImage!, 1.0)
+        } else {
+            image2D = UIImageJPEGRepresentation(UIImage(named: "noun_1348715_cc")!, 1.0)
+        }
+        return image2D
     }
     
    
     func save2CloudV2(rex2S:[wayPoint]?, rex2D:[CKRecordID]?, sharing: Bool, reordered: Bool) {
         var listOfWayPointsSaved:[wayPoint]! = []
+        var recordsR:[CKRecord] = []
+        
+        let query = CKQuery(recordType: "Waypoints", predicate: NSPredicate(value: true))
+        privateDB.perform(query, inZoneWith: recordZoneID) { (records, error) in
+            records?.forEach({ (record) in
+                
+                // System Field from property
+                let recordName_fromProperty = record.recordID.recordName
+                print("System Field, recordName: \(recordName_fromProperty)")
+                
+                // Custom Field from key path (eg: deeplink)
+                let deeplink = record.value(forKey: "name")
+                print("Custom Field, deeplink: \(deeplink ?? "")")
+                
+            })
+            print("fcuk07082018 records \(records)")
+        }
         
         DispatchQueue.main.async {
             var p2S = 0
             for point2Save in rex2S! {
-               
-                var ckWayPointRecord: CKRecord!
-                if point2Save.recordRecord == nil {
-                    ckWayPointRecord = CKRecord(recordType: Constants.Entity.wayPoints, zoneID: recordZone.zoneID)
-                } else {
-//                    ckWayPointRecord = CKRecord(recordType: Constants.Entity.wayPoints, recordID: point2Save.recordID!)
-                    ckWayPointRecord = point2Save.recordRecord
-//                    self.fetchNSave(recordID: point2Save.recordID!, wp2S: point2Save)
-                }
-                
-                let long2F:Double = (point2Save.coordinates?.longitude)!
-                let lat2F:Double = (point2Save.coordinates?.latitude)!
-
-                ckWayPointRecord.setObject(long2F as CKRecordValue, forKey: Constants.Attribute.longitude)
-                ckWayPointRecord.setObject(lat2F as CKRecordValue, forKey: Constants.Attribute.latitude)
-                ckWayPointRecord.setObject(point2Save.name as CKRecordValue?, forKey: Constants.Attribute.name)
-                ckWayPointRecord.setObject(point2Save.hint as CKRecordValue?, forKey: Constants.Attribute.hint)
-                ckWayPointRecord.setObject((point2Save.boxes! as CKRecordValue), forKey:  Constants.Attribute.boxes)
-                ckWayPointRecord.setObject(point2Save.major as CKRecordValue?, forKey:  Constants.Attribute.major)
-                ckWayPointRecord.setObject(point2Save.minor as CKRecordValue?, forKey:  Constants.Attribute.minor)
-                 ckWayPointRecord.setObject(point2Save.proximity?.rawValue as CKRecordValue?, forKey:  Constants.Attribute.proximity)
-                ckWayPointRecord.setObject(point2Save.UUID as CKRecordValue?, forKey: Constants.Attribute.UUID)
-                
-                ckWayPointRecord.setObject(point2Save.challenge as CKRecordValue?, forKey: Constants.Attribute.challenge)
-                ckWayPointRecord.setObject(point2Save.URL as CKRecordValue?, forKey: Constants.Attribute.URL)
-                if reordered {
-                    ckWayPointRecord.setObject(point2Save.order as CKRecordValue?, forKey: Constants.Attribute.order)
-                } else {
-                    ckWayPointRecord.setObject(p2S as CKRecordValue?, forKey: Constants.Attribute.order)
-                }
-                ckWayPointRecord.setParent(self.sharePoint)
-                p2S += 1
-                
-                let newWP  = wayPoint(recordID: ckWayPointRecord.recordID, recordRecord: ckWayPointRecord, UUID: point2Save.UUID, major: point2Save.major, minor: point2Save.minor, proximity: point2Save.proximity, coordinates: point2Save.coordinates, name: point2Save.name, hint: point2Save.hint, image: point2Save.image, order: point2Save.order, boxes: point2Save.boxes, challenge: point2Save.challenge, URL: point2Save.URL)
-                listOfWayPointsSaved.append(newWP)
-                
-                var image2D: Data!
-                if point2Save.image != nil {
-                    let newImage = point2Save.image?.resize(size: CGSize(width: 1080, height: 1920))
-                    image2D = UIImageJPEGRepresentation(newImage!, 1.0)
-                } else {
-                    image2D = UIImageJPEGRepresentation(UIImage(named: "noun_1348715_cc")!, 1.0)
-                }
-                if let _ = point2Save.name {
-                    let file2ShareURL = NSURL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(NSUUID().uuidString+".dat")
-                    do {
-                        try image2D?.write(to: file2ShareURL!, options: .atomicWrite)
-                        let newAsset = CKAsset(fileURL: file2ShareURL!)
-                        ckWayPointRecord.setObject(newAsset as CKAsset?, forKey: Constants.Attribute.imageData)
-                            self.records2Share.append(ckWayPointRecord)
-                    } catch let e as NSError {
-                        print("Error! \(e)");
-                        return
-                    }
-                }
+                    self.fetchNSave(wp2S: point2Save, p2S: p2S, reorder: reordered)
+                     p2S += 1
             }
             
            print("fcuk02082018 records2Share \(self.records2Share.count)")
@@ -1582,10 +1593,10 @@ private func getSECoordinate(mRect: MKMapRect) -> CLLocationCoordinate2D {
                     print("error \(error.debugDescription)")
                 }
                 
-                for rex in record! {
-                    let rex2U = listOfWayPointsSaved.filter { $0.order == rex.object(forKey:  Constants.Attribute.order) as? Int }
-                    listOfWayPointsSaved[(rex2U.first?.order)!].recordRecord = rex
-                }
+//                for rex in record! {
+//                    let rex2U = listOfWayPointsSaved.filter { $0.order == rex.object(forKey:  Constants.Attribute.order) as? Int }
+//                    listOfWayPointsSaved[(rex2U.first?.order)!].recordRecord = rex
+//                }
                 DispatchQueue.main.async() {
                     if self.spinner != nil {
                         self.spinner.stopAnimating()
@@ -1597,7 +1608,7 @@ private func getSECoordinate(mRect: MKMapRect) -> CLLocationCoordinate2D {
                     self.sharing(record2S: self.sharePoint!)
                     order2Search = listOfPoint2Seek.count
                 }
-                listOfPoint2Seek = listOfWayPointsSaved
+//                listOfPoint2Seek = listOfWayPointsSaved
             }
             self.privateDB.add(modifyOp)
         }
