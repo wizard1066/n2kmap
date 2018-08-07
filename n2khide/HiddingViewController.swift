@@ -1554,7 +1554,7 @@ private func getSECoordinate(mRect: MKMapRect) -> CLLocationCoordinate2D {
         print("fcuk07082018 recordZoneID \(recordZoneID) \(recordZone.zoneID)")
         privateDB.perform(query, inZoneWith: recordZone.zoneID) { (records, error) in
             if error != nil {
-                
+                self.parseCloudError(errorCode: error as! CKError)
             } else {
             records?.forEach({ (record) in
                 let find = listOfPoint2Seek.filter { $0.name == record.value(forKey: "name") as! String }
@@ -1563,7 +1563,7 @@ private func getSECoordinate(mRect: MKMapRect) -> CLLocationCoordinate2D {
                     listOfPoint2Seek[(find.first?.order!)!].recordRecord = record
                 }
                 })
-                var p2S = listOfPoint2Seek.count
+                var p2S = 0
                 for point2Save in rex2S! {
                     let record2Save = self.updateRecord(wp2S: point2Save, p2S: p2S, reorder: reordered)
                     if record2Save != nil {
