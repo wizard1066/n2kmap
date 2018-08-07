@@ -254,6 +254,7 @@ class HiddingViewController: UIViewController, UIDropInteractionDelegate, MKMapV
         operation.fetchRecordZonesCompletionBlock = { records, error in
             if error != nil {
                 print("\(String(describing: error?.localizedDescription))")
+                self.parseCloudError(errorCode: error as! CKError)
             }
             for rex in records! {
                 
@@ -1388,7 +1389,7 @@ private func getSECoordinate(mRect: MKMapRect) -> CLLocationCoordinate2D {
         self.privateDB.save(zone2S, completionHandler: ({returnRecord, error in
             if error != nil {
                 // Zone creation failed
-                
+                self.parseCloudError(errorCode: error as! CKError)
             } else {
                 // Zone creation succeeded
                 recordZone = returnRecord
@@ -1475,24 +1476,16 @@ private func getSECoordinate(mRect: MKMapRect) -> CLLocationCoordinate2D {
         //        }
     }
     
-    func fetchNSave(wp2S: wayPoint, p2S: Int, reorder: Bool) {
+    func updateRecord(wp2S: wayPoint, p2S: Int, reorder: Bool) -> CKRecord? {
         if wp2S.recordID == nil {
             let record = CKRecord(recordType: Constants.Entity.wayPoints, zoneID: recordZone.zoneID)
             let record2S = self.setRecord(wp2S: wp2S, record: record, p2S: p2S, reorder: reorder)
-            self.saveRecord(record2S: record2S)
+            return record2S
         } else {
-                privateDB.fetch(withRecordID: recordID!, completionHandler: { (record, error) in
-                    if error != nil {
-                        print("Error fetching record: \(error?.localizedDescription)")
-                } else {
-                    let record2S = self.setRecord(wp2S: wp2S, record: record, p2S: p2S, reorder: reorder)
-                    self.saveRecord(record2S: record2S)
-    //                let newWP  = wayPoint(recordID: wp2S.recordID, recordRecord:savedRecord , UUID: wp2S.UUID, major: wp2S.major, minor: wp2S.minor, proximity: wp2S.proximity, coordinates: wp2S.coordinates, name: wp2S.name, hint: wp2S.hint, image: wp2S.image, order: wp2S.order, boxes: wp2S.boxes, challenge: wp2S.challenge, URL: wp2S.URL)
-    //                listOfWayPointsSaved.append(newWP)
-                    // Save this record again
-                }
-            })
+            let record2S = self.setRecord(wp2S: wp2S, record: wp2S.recordRecord, p2S: p2S, reorder: reorder)
+             return record2S
         }
+        return nil
     }
     
     func saveRecord(record2S: CKRecord) {
@@ -1501,6 +1494,8 @@ private func getSECoordinate(mRect: MKMapRect) -> CLLocationCoordinate2D {
                 print("Error saving record: \(saveError?.localizedDescription)")
             } else {
                 print("Successfully updated record!")
+                let order2D = savedRecord?.object(forKey: "order") as? Int
+                listOfPoint2Seek[order2D!].recordID = savedRecord?.recordID
             }
         })
     }
@@ -1553,32 +1548,57 @@ private func getSECoordinate(mRect: MKMapRect) -> CLLocationCoordinate2D {
     
    
     func save2CloudV2(rex2S:[wayPoint]?, rex2D:[CKRecordID]?, sharing: Bool, reordered: Bool) {
-        var listOfWayPointsSaved:[wayPoint]! = []
-        var recordsR:[CKRecord] = []
-        
+        var rex2Skip:[String] = []
+        var records2Save:[CKRecord] = []
         let query = CKQuery(recordType: "Waypoints", predicate: NSPredicate(value: true))
-        privateDB.perform(query, inZoneWith: recordZoneID) { (records, error) in
+        print("fcuk07082018 recordZoneID \(recordZoneID) \(recordZone.zoneID)")
+        privateDB.perform(query, inZoneWith: recordZone.zoneID) { (records, error) in
+            if error != nil {
+                
+            } else {
             records?.forEach({ (record) in
+                let find = listOfPoint2Seek.filter { $0.name == record.value(forKey: "name") as! String }
+                if !find.isEmpty {
+                     listOfPoint2Seek[(find.first?.order!)!].recordID = record.recordID
+                    listOfPoint2Seek[(find.first?.order!)!].recordRecord = record
+                }
+                })
+                var p2S = listOfPoint2Seek.count
+                for point2Save in rex2S! {
+                    let record2Save = self.updateRecord(wp2S: point2Save, p2S: p2S, reorder: reordered)
+                    if record2Save != nil {
+                        records2Save.append(record2Save!)
+                    }
+                    p2S += 1
+                }
+                let saveOp = CKModifyRecordsOperation(recordsToSave:
+                    records2Save, recordIDsToDelete: rex2D)
+                saveOp.savePolicy = .allKeys
+                saveOp.perRecordCompletionBlock = {(record,error) in
+                    print("error \(error.debugDescription)")
+                    let find = listOfPoint2Seek.filter { $0.name == record.value(forKey: "name") as! String }
+                    if !find.isEmpty {
+                        listOfPoint2Seek[(find.first?.order!)!].recordID = record.recordID
+                        listOfPoint2Seek[(find.first?.order!)!].recordRecord = record
+                    }
+                }
+                saveOp.modifyRecordsCompletionBlock = { (record, recordID,
+                    error) in
+                    if error != nil {
+                        print("error \(error.debugDescription)")
+                        self.parseCloudError(errorCode: error as! CKError)
+                    }
+                }
                 
-                // System Field from property
-                let recordName_fromProperty = record.recordID.recordName
-                print("System Field, recordName: \(recordName_fromProperty)")
-                
-                // Custom Field from key path (eg: deeplink)
-                let deeplink = record.value(forKey: "name")
-                print("Custom Field, deeplink: \(deeplink ?? "")")
-                
-            })
-            print("fcuk07082018 records \(records)")
+                self.privateDB.add(saveOp)
+                print("fcuk07082018 records \(records?.count)")
+            }
         }
         
         DispatchQueue.main.async {
-            var p2S = 0
-            for point2Save in rex2S! {
-                    self.fetchNSave(wp2S: point2Save, p2S: p2S, reorder: reordered)
-                     p2S += 1
-            }
             
+
+                
            print("fcuk02082018 records2Share \(self.records2Share.count)")
             
             let modifyOp = CKModifyRecordsOperation(recordsToSave:
@@ -1591,6 +1611,7 @@ private func getSECoordinate(mRect: MKMapRect) -> CLLocationCoordinate2D {
                 error) in
                 if error != nil {
                     print("error \(error.debugDescription)")
+                    self.parseCloudError(errorCode: error as! CKError)
                 }
                 
 //                for rex in record! {
@@ -1611,6 +1632,103 @@ private func getSECoordinate(mRect: MKMapRect) -> CLLocationCoordinate2D {
 //                listOfPoint2Seek = listOfWayPointsSaved
             }
             self.privateDB.add(modifyOp)
+        }
+    }
+    
+    func parseCloudError(errorCode: CKError) {
+        switch errorCode {
+            case CKError.internalError:
+                doAlert(title: "iCloudError", message:  "CloudKit.framework encountered an error.  This is a non-recoverable error.")
+                break
+            case CKError.partialFailure:
+                doAlert(title: "iCloudError", message:  "Some items failed, but the operation succeeded overall.")
+            break
+            case CKError.networkUnavailable:
+                doAlert(title: "iCloudError", message:  "Network not available.")
+            break
+            case CKError.networkFailure:
+                 doAlert(title: "iCloudError", message:  "Network error (available but CFNetwork gave us an error).")
+            break
+            case CKError.badContainer:
+                doAlert(title: "iCloudError", message:  "Un-provisioned or unauthorized container. Try provisioning the container before retrying the operation.")
+            break
+            case CKError.serviceUnavailable:
+                doAlert(title: "iCloudError", message:  "Service unavailable.")
+            break
+            case CKError.requestRateLimited:
+                doAlert(title: "iCloudError", message:  "Client is being rate limited.")
+            break
+            case CKError.missingEntitlement:
+                doAlert(title: "iCloudError", message:  "Missing entitlement.")
+            break
+            case CKError.notAuthenticated:
+                doAlert(title: "iCloudError", message:  "Not authenticated (writing without being logged in, no user record).")
+            break
+            case CKError.permissionFailure:
+                doAlert(title: "iCloudError", message:  "Access failure (save or fetch.  This is a non-recoverable error.")
+            break
+            case CKError.unknownItem:
+                doAlert(title: "iCloudError", message:  "Record does not exist.  This is a non-recoverable error.")
+            break
+            case CKError.invalidArguments:
+                doAlert(title: "iCloudError", message:  "Bad client request (bad record graph, malformed predicate).")
+            break
+        case CKError.serverRecordChanged:
+            doAlert(title: "iCloudError", message:  "The record was rejected because the version on the server was different.")
+            break
+        case CKError.serverRejectedRequest:
+            doAlert(title: "iCloudError", message:  "The server rejected this request.  This is a non-recoverable error.")
+            break
+        case CKError.assetFileNotFound:
+           doAlert(title: "iCloudError", message:  "Asset file was not found.")
+            break
+        case CKError.assetFileModified:
+            doAlert(title: "iCloudError", message:  "Asset file content was modified while being saved.")
+            break
+        case CKError.incompatibleVersion:
+            doAlert(title: "iCloudError", message:  "App version is less than the minimum allowed version.")
+            break
+        case CKError.constraintViolation: /*  */
+            doAlert(title: "iCloudError", message:  "The server rejected the request because there was a conflict with a unique field.")
+            break
+        case CKError.operationCancelled: /* */
+            doAlert(title: "iCloudError", message:  "A CKOperation was explicitly cancelled.")
+            break
+        case CKError.changeTokenExpired: /*  */
+            doAlert(title: "iCloudError", message:  "The previousServerChangeToken value is too old and the client must re-sync from scratch.")
+            break
+        case CKError.batchRequestFailed:
+            doAlert(title: "iCloudError", message:  "One of the items in this batch operation failed in a zone with atomic updates, so the entire batch was rejected.")
+            break
+        case CKError.zoneBusy:
+            doAlert(title: "iCloudError", message:  "The server is too busy to handle this zone operation. Try the operation again in a few seconds.")
+            break
+        case CKError.badDatabase:
+            doAlert(title: "iCloudError", message:  "Operation could not be completed on the given database. Likely caused by attempting to modify zones in the public database.")
+            break
+        case CKError.quotaExceeded:
+           doAlert(title: "iCloudError", message:  "Saving a record would exceed quota.")
+            break
+        case CKError.zoneNotFound:
+            doAlert(title: "iCloudError", message:  "The specified zone does not exist on the server.")
+            break
+        case CKError.limitExceeded:
+           doAlert(title: "iCloudError", message:  "The request to the server was too large. Retry this request as a smaller batch")
+            break
+        case CKError.userDeletedZone:
+            doAlert(title: "iCloudError", message:  "The user deleted this zone through the settings UI. Your client should either remove its local data or prompt the user before attempting to re-upload any data to this zone.")
+            break
+        default:
+            // do nothing
+            break
+        }
+    }
+    
+    func doAlert(title: String, message:String) {
+        DispatchQueue.main.async {
+            let alert = UIAlertController(title:title, message:message, preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
         }
     }
         
@@ -1648,6 +1766,7 @@ private func getSECoordinate(mRect: MKMapRect) -> CLLocationCoordinate2D {
                 error) in
                 if error != nil {
                     print("error \(error.debugDescription)")
+                    self.parseCloudError(errorCode: error as! CKError)
                 }
 //                self.sharing(record2S: self.sharePoint)
 //                self.save2CloudV2(rex2S: listOfPoint2Seek, rex2D: nil, sharing: false, reordered: false)
@@ -1830,6 +1949,7 @@ func fetchShare() {
         sharedDB.perform(query, inZoneWith: recordZoneID) { (records, error) in
             if error != nil {
                 print("error \(String(describing: error))")
+                self.parseCloudError(errorCode: error as! CKError)
             }
             for record in records! {
                 self.buildWaypoint(record2U: record)
@@ -1863,6 +1983,7 @@ func fetchShare() {
         privateDB.perform(query, inZoneWith: recordZoneID) { (records, error) in
             if error != nil {
                 print("error \(String(describing: error))")
+                self.parseCloudError(errorCode: error as! CKError)
             }
             for record in records! {
                 
@@ -1889,6 +2010,7 @@ func fetchShare() {
         privateDB.perform(query, inZoneWith: recordZoneID) { (records, error) in
             if error != nil {
                 print("error \(String(describing: error))")
+                self.parseCloudError(errorCode: error as! CKError)
             }
 
             for record in records! {
@@ -1945,6 +2067,7 @@ func fetchShare() {
             records, error in
             if error != nil {
                 print("\(error!)")
+                self.parseCloudError(errorCode: error as! CKError)
             } else {
                 for (_, record) in records! {
                     self.sharePoint = record
