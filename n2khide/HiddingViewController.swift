@@ -1604,9 +1604,9 @@ private func getSECoordinate(mRect: MKMapRect) -> CLLocationCoordinate2D {
             let modifyOp = CKModifyRecordsOperation(recordsToSave:
                 self.records2Share, recordIDsToDelete: rex2D)
             modifyOp.savePolicy = .allKeys
-            modifyOp.perRecordCompletionBlock = {(record,error) in
-                print("error \(error.debugDescription)")
-            }
+//            modifyOp.perRecordCompletionBlock = {(record,error) in
+//                print("error \(record) \(error.debugDescription)")
+//            }
             modifyOp.modifyRecordsCompletionBlock = { (record, recordID,
                 error) in
                 if error != nil {
