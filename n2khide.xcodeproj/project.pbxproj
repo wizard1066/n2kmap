@@ -25,6 +25,7 @@
 		EF8586A220BEE09C00A21777 /* EditWaypointController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF8586A120BEE09C00A21777 /* EditWaypointController.swift */; };
 		EF897B7620D3E2D800C0D2D9 /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EF897B7520D3E2D700C0D2D9 /* UserNotifications.framework */; };
 		EF8E3B2320D1481800F6C6CD /* Geotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF8E3B2220D1481800F6C6CD /* Geotification.swift */; };
+		EFA1A14D211C336C000E44AE /* Leysin.gpx in Resources */ = {isa = PBXBuildFile; fileRef = EFA1A14C211C336C000E44AE /* Leysin.gpx */; };
 		EFBA662920EA198E0093D662 /* ImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFBA662820EA198E0093D662 /* ImageViewController.swift */; };
 		EFE908B520F492C400C73501 /* ZoneTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFE908B420F492C400C73501 /* ZoneTableViewCell.swift */; };
 		EFF07FB020C03B160018C8C7 /* Common.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFF07FAF20C03B160018C8C7 /* Common.swift */; };
@@ -53,6 +54,7 @@
 		EF8586A120BEE09C00A21777 /* EditWaypointController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditWaypointController.swift; sourceTree = "<group>"; };
 		EF897B7520D3E2D700C0D2D9 /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
 		EF8E3B2220D1481800F6C6CD /* Geotification.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Geotification.swift; sourceTree = "<group>"; };
+		EFA1A14C211C336C000E44AE /* Leysin.gpx */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Leysin.gpx; sourceTree = "<group>"; };
 		EFBA662820EA198E0093D662 /* ImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageViewController.swift; sourceTree = "<group>"; };
 		EFE908B420F492C400C73501 /* ZoneTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoneTableViewCell.swift; sourceTree = "<group>"; };
 		EFF07FAF20C03B160018C8C7 /* Common.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Common.swift; sourceTree = "<group>"; };
@@ -122,6 +124,7 @@
 				EF258B8A20C7D1CD0089EB4D /* n2khide.entitlements */,
 				EF15FA3220F74C3A0065F16D /* Table Group */,
 				EFF07FAF20C03B160018C8C7 /* Common.swift */,
+				EFA1A14C211C336C000E44AE /* Leysin.gpx */,
 				EF56461720BD9A4C00F500F6 /* AppDelegate.swift */,
 				EF56461B20BD9A4C00F500F6 /* Main.storyboard */,
 				EFFE6EF820ECB91800D5D904 /* WebViewController.swift */,
@@ -218,6 +221,7 @@
 				EF56462220BD9A4E00F500F6 /* LaunchScreen.storyboard in Resources */,
 				EF56461F20BD9A4E00F500F6 /* Assets.xcassets in Resources */,
 				EF0C63A720DA90F500A65CC0 /* Star Strella.otf in Resources */,
+				EFA1A14D211C336C000E44AE /* Leysin.gpx in Resources */,
 				EF56461D20BD9A4C00F500F6 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

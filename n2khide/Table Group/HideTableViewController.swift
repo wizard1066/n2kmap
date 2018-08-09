@@ -123,11 +123,18 @@ class HideTableViewController: UITableViewController, UIPopoverPresentationContr
     
     // MARK: View management
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+         self.tableView.reloadData()
+    }
+    
+    
     override func viewDidLoad() {
         
         super.viewDidLoad()
         self.tableView.dataSource = self
         self.tableView.delegate = self
+       
         
         UIBarButtonItem.appearance().setTitleTextAttributes(
             [NSAttributedStringKey.font : UIFont(name: "AvenirNextCondensed-Regular", size: 16)!], for: .normal)

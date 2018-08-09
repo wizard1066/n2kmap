@@ -254,7 +254,7 @@ class HiddingViewController: UIViewController, UIDropInteractionDelegate, MKMapV
         operation.fetchRecordZonesCompletionBlock = { records, error in
             if error != nil {
                 print("\(String(describing: error?.localizedDescription))")
-                self.parseCloudError(errorCode: error as! CKError)
+                self.parseCloudError(errorCode: error as! CKError, lineno: 257)
             }
             for rex in records! {
                 
@@ -1389,7 +1389,7 @@ private func getSECoordinate(mRect: MKMapRect) -> CLLocationCoordinate2D {
         self.privateDB.save(zone2S, completionHandler: ({returnRecord, error in
             if error != nil {
                 // Zone creation failed
-                self.parseCloudError(errorCode: error as! CKError)
+                self.parseCloudError(errorCode: error as! CKError, lineno: 1392)
             } else {
                 // Zone creation succeeded
                 recordZone = returnRecord
@@ -1554,7 +1554,7 @@ private func getSECoordinate(mRect: MKMapRect) -> CLLocationCoordinate2D {
         print("fcuk07082018 recordZoneID \(recordZoneID) \(recordZone.zoneID)")
         privateDB.perform(query, inZoneWith: recordZone.zoneID) { (records, error) in
             if error != nil {
-                self.parseCloudError(errorCode: error as! CKError)
+                self.parseCloudError(errorCode: error as! CKError, lineno: 1557)
             } else {
             records?.forEach({ (record) in
                 let find = listOfPoint2Seek.filter { $0.name == record.value(forKey: "name") as! String }
@@ -1586,7 +1586,7 @@ private func getSECoordinate(mRect: MKMapRect) -> CLLocationCoordinate2D {
                     error) in
                     if error != nil {
                         print("error \(error.debugDescription)")
-                        self.parseCloudError(errorCode: error as! CKError)
+                        self.parseCloudError(errorCode: error as! CKError, lineno: 1589)
                     }
                 }
                 
@@ -1611,7 +1611,7 @@ private func getSECoordinate(mRect: MKMapRect) -> CLLocationCoordinate2D {
                 error) in
                 if error != nil {
                     print("error \(error.debugDescription)")
-                    self.parseCloudError(errorCode: error as! CKError)
+                    self.parseCloudError(errorCode: error as! CKError, lineno: 1614)
                 }
                 
 //                for rex in record! {
@@ -1635,88 +1635,88 @@ private func getSECoordinate(mRect: MKMapRect) -> CLLocationCoordinate2D {
         }
     }
     
-    func parseCloudError(errorCode: CKError) {
+    func parseCloudError(errorCode: CKError, lineno: Int) {
         switch errorCode {
             case CKError.internalError:
-                doAlert(title: "iCloudError", message:  "CloudKit.framework encountered an error.  This is a non-recoverable error.")
+                doAlert(title: "iCloudError" + String(lineno), message:  "CloudKit.framework encountered an error.  This is a non-recoverable error.")
                 break
             case CKError.partialFailure:
-                doAlert(title: "iCloudError", message:  "Some items failed, but the operation succeeded overall.")
+                doAlert(title: "iCloudError" + String(lineno), message:  "Some items failed, but the operation succeeded overall.")
             break
             case CKError.networkUnavailable:
-                doAlert(title: "iCloudError", message:  "Network not available.")
+                doAlert(title: "iCloudError" + String(lineno), message:  "Network not available.")
             break
             case CKError.networkFailure:
-                 doAlert(title: "iCloudError", message:  "Network error (available but CFNetwork gave us an error).")
+                 doAlert(title: "iCloudError" + String(lineno), message:  "Network error (available but CFNetwork gave us an error).")
             break
             case CKError.badContainer:
-                doAlert(title: "iCloudError", message:  "Un-provisioned or unauthorized container. Try provisioning the container before retrying the operation.")
+                doAlert(title: "iCloudError" + String(lineno), message:  "Un-provisioned or unauthorized container. Try provisioning the container before retrying the operation.")
             break
             case CKError.serviceUnavailable:
-                doAlert(title: "iCloudError", message:  "Service unavailable.")
+                doAlert(title: "iCloudError" + String(lineno), message:  "Service unavailable.")
             break
             case CKError.requestRateLimited:
-                doAlert(title: "iCloudError", message:  "Client is being rate limited.")
+                doAlert(title: "iCloudError" + String(lineno), message:  "Client is being rate limited.")
             break
             case CKError.missingEntitlement:
-                doAlert(title: "iCloudError", message:  "Missing entitlement.")
+                doAlert(title: "iCloudError" + String(lineno), message:  "Missing entitlement.")
             break
             case CKError.notAuthenticated:
-                doAlert(title: "iCloudError", message:  "Not authenticated (writing without being logged in, no user record).")
+                doAlert(title: "iCloudError" + String(lineno), message:  "Not authenticated (writing without being logged in, no user record).")
             break
             case CKError.permissionFailure:
-                doAlert(title: "iCloudError", message:  "Access failure (save or fetch.  This is a non-recoverable error.")
+                doAlert(title: "iCloudError" + String(lineno), message:  "Access failure (save or fetch.  This is a non-recoverable error.")
             break
             case CKError.unknownItem:
-                doAlert(title: "iCloudError", message:  "Record does not exist.  This is a non-recoverable error.")
+                doAlert(title: "iCloudError" + String(lineno), message:  "Record does not exist.  This is a non-recoverable error.")
             break
             case CKError.invalidArguments:
-                doAlert(title: "iCloudError", message:  "Bad client request (bad record graph, malformed predicate).")
+                doAlert(title: "iCloudError" + String(lineno), message:  "Bad client request (bad record graph, malformed predicate).")
             break
         case CKError.serverRecordChanged:
-            doAlert(title: "iCloudError", message:  "The record was rejected because the version on the server was different.")
+            doAlert(title: "iCloudError" + String(lineno), message:  "The record was rejected because the version on the server was different.")
             break
         case CKError.serverRejectedRequest:
-            doAlert(title: "iCloudError", message:  "The server rejected this request.  This is a non-recoverable error.")
+            doAlert(title: "iCloudError" + String(lineno), message:  "The server rejected this request.  This is a non-recoverable error.")
             break
         case CKError.assetFileNotFound:
-           doAlert(title: "iCloudError", message:  "Asset file was not found.")
+           doAlert(title: "iCloudError" + String(lineno), message:  "Asset file was not found.")
             break
         case CKError.assetFileModified:
-            doAlert(title: "iCloudError", message:  "Asset file content was modified while being saved.")
+            doAlert(title: "iCloudError" + String(lineno), message:  "Asset file content was modified while being saved.")
             break
         case CKError.incompatibleVersion:
-            doAlert(title: "iCloudError", message:  "App version is less than the minimum allowed version.")
+            doAlert(title: "iCloudError" + String(lineno), message:  "App version is less than the minimum allowed version.")
             break
         case CKError.constraintViolation: /*  */
-            doAlert(title: "iCloudError", message:  "The server rejected the request because there was a conflict with a unique field.")
+            doAlert(title: "iCloudError" + String(lineno), message:  "The server rejected the request because there was a conflict with a unique field.")
             break
         case CKError.operationCancelled: /* */
-            doAlert(title: "iCloudError", message:  "A CKOperation was explicitly cancelled.")
+            doAlert(title: "iCloudError" + String(lineno), message:  "A CKOperation was explicitly cancelled.")
             break
         case CKError.changeTokenExpired: /*  */
-            doAlert(title: "iCloudError", message:  "The previousServerChangeToken value is too old and the client must re-sync from scratch.")
+            doAlert(title: "iCloudError" + String(lineno), message:  "The previousServerChangeToken value is too old and the client must re-sync from scratch.")
             break
         case CKError.batchRequestFailed:
-            doAlert(title: "iCloudError", message:  "One of the items in this batch operation failed in a zone with atomic updates, so the entire batch was rejected.")
+            doAlert(title: "iCloudError" + String(lineno), message:  "One of the items in this batch operation failed in a zone with atomic updates, so the entire batch was rejected.")
             break
         case CKError.zoneBusy:
-            doAlert(title: "iCloudError", message:  "The server is too busy to handle this zone operation. Try the operation again in a few seconds.")
+            doAlert(title: "iCloudError" + String(lineno), message:  "The server is too busy to handle this zone operation. Try the operation again in a few seconds.")
             break
         case CKError.badDatabase:
-            doAlert(title: "iCloudError", message:  "Operation could not be completed on the given database. Likely caused by attempting to modify zones in the public database.")
+            doAlert(title: "iCloudError" + String(lineno), message:  "Operation could not be completed on the given database. Likely caused by attempting to modify zones in the public database.")
             break
         case CKError.quotaExceeded:
-           doAlert(title: "iCloudError", message:  "Saving a record would exceed quota.")
+           doAlert(title: "iCloudError" + String(lineno), message:  "Saving a record would exceed quota.")
             break
         case CKError.zoneNotFound:
-            doAlert(title: "iCloudError", message:  "The specified zone does not exist on the server.")
+            doAlert(title: "iCloudError" + String(lineno), message:  "The specified zone does not exist on the server.")
             break
         case CKError.limitExceeded:
-           doAlert(title: "iCloudError", message:  "The request to the server was too large. Retry this request as a smaller batch")
+           doAlert(title: "iCloudError" + String(lineno), message:  "The request to the server was too large. Retry this request as a smaller batch")
             break
         case CKError.userDeletedZone:
-            doAlert(title: "iCloudError", message:  "The user deleted this zone through the settings UI. Your client should either remove its local data or prompt the user before attempting to re-upload any data to this zone.")
+            doAlert(title: "iCloudError" + String(lineno), message:  "The user deleted this zone through the settings UI. Your client should either remove its local data or prompt the user before attempting to re-upload any data to this zone.")
             break
         default:
             // do nothing
@@ -1766,7 +1766,7 @@ private func getSECoordinate(mRect: MKMapRect) -> CLLocationCoordinate2D {
                 error) in
                 if error != nil {
                     print("error \(error.debugDescription)")
-                    self.parseCloudError(errorCode: error as! CKError)
+                    self.parseCloudError(errorCode: error as! CKError, lineno: 1769)
                 }
 //                self.sharing(record2S: self.sharePoint)
 //                self.save2CloudV2(rex2S: listOfPoint2Seek, rex2D: nil, sharing: false, reordered: false)
@@ -1831,6 +1831,7 @@ private func getSECoordinate(mRect: MKMapRect) -> CLLocationCoordinate2D {
     }
     
     func doLive() {
+         listOfPoint2Search.removeAll()
         windowView = .playing
         pin.isEnabled = false
         scanButton.isEnabled = false
@@ -1949,7 +1950,7 @@ func fetchShare() {
         sharedDB.perform(query, inZoneWith: recordZoneID) { (records, error) in
             if error != nil {
                 print("error \(String(describing: error))")
-                self.parseCloudError(errorCode: error as! CKError)
+                self.parseCloudError(errorCode: error as! CKError, lineno: 1952)
             }
             for record in records! {
                 self.buildWaypoint(record2U: record)
@@ -1983,7 +1984,7 @@ func fetchShare() {
         privateDB.perform(query, inZoneWith: recordZoneID) { (records, error) in
             if error != nil {
                 print("error \(String(describing: error))")
-                self.parseCloudError(errorCode: error as! CKError)
+                self.parseCloudError(errorCode: error as! CKError, lineno: 1986)
             }
             for record in records! {
                 
@@ -2010,7 +2011,7 @@ func fetchShare() {
         privateDB.perform(query, inZoneWith: recordZoneID) { (records, error) in
             if error != nil {
                 print("error \(String(describing: error))")
-                self.parseCloudError(errorCode: error as! CKError)
+                self.parseCloudError(errorCode: error as! CKError, lineno: 2013)
             }
 
             for record in records! {
@@ -2067,7 +2068,7 @@ func fetchShare() {
             records, error in
             if error != nil {
                 print("\(error!)")
-                self.parseCloudError(errorCode: error as! CKError)
+                self.parseCloudError(errorCode: error as! CKError, lineno: 2070)
             } else {
                 for (_, record) in records! {
                     self.sharePoint = record
