@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<gpx version="1.1" creator="Xcode">
+    
+    <!--
+     Provide one or more waypoints containing a latitude/longitude pair. If you provide one
+     waypoint, Xcode will simulate that specific location. If you provide multiple waypoints,
+     Xcode will simulate a route visiting each waypoint.
+     -->
+    <wpt lat="51.510135" lon="-0.133368">
+        <name>A0</name>
+        <time>2014-09-24T14:55:00Z</time>
+    </wpt>
+<wpt lat="51.510320" lon="-0.132232">
+        <name>A1</name>
+        <time>2014-09-24T14:55:30Z</time>
+</wpt>
+<wpt lat="51.510453" lon="-0.131523">
+        <name>A2</name>
+        <time>2014-09-24T14:55:59Z</time>
+</wpt>
+        <wpt lat="51.510591" lon="-0.130906">
+            <name>A3</name>
+            <time>2014-09-24T14:56:30Z</time>
+</wpt>
+<wpt lat="51.510919" lon="-0.129853">
+            <name>A4</name>
+            <time>2014-09-24T14:57:30Z</time>
+</wpt>
+    
+</gpx>

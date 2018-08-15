@@ -2406,6 +2406,9 @@ func fetchShare() {
             let wp2FLat = self.getLocationDegreesFrom(latitude: coordinate.latitude)
             let wp2FLog = self.getLocationDegreesFrom(longitude: coordinate.longitude)
             let hint2D = wp2FLat + wp2FLog
+            let cord2D = String(format: "<wpt lat=%f lon=%f>",coordinate.latitude, coordinate.longitude)
+            UIPasteboard.general.string = cord2D
+            print(cord2D)
              let uniqueName =  returnUUID(Source2U: hint2D)
 //            let uniqueName = UUID().uuidString
 //           let waypoint2 = MKPointAnnotation()
