@@ -1,30 +1,63 @@
 <?xml version="1.0"?>
 <gpx version="1.1" creator="Xcode">
     
-    <!--
+    <!--+"*ç
      Provide one or more waypoints containing a latitude/longitude pair. If you provide one
      waypoint, Xcode will simulate that specific location. If you provide multiple waypoints,
      Xcode will simulate a route visiting each waypoint.
      -->
-    <wpt lat="51.510135" lon="-0.133368">
+    
+    <wpt lat="51.509713" lon="-0.132888">
         <name>A0</name>
         <time>2014-09-24T14:55:00Z</time>
     </wpt>
-<wpt lat="51.510320" lon="-0.132232">
+    
+    <wpt lat="51.510108" lon="-0.133355">
         <name>A1</name>
         <time>2014-09-24T14:55:30Z</time>
-</wpt>
-<wpt lat="51.510453" lon="-0.131523">
-        <name>A2</name>
-        <time>2014-09-24T14:55:59Z</time>
-</wpt>
-        <wpt lat="51.510591" lon="-0.130906">
+    </wpt>
+
+        <wpt lat="51.510086" lon="-0.133485">
+            <name>A2</name>
+            <time>2014-09-24T14:55:35Z</time>
+        </wpt>
+        
+        <wpt lat="51.510357" lon="-0.133690">
             <name>A3</name>
-            <time>2014-09-24T14:56:30Z</time>
-</wpt>
-<wpt lat="51.510919" lon="-0.129853">
-            <name>A4</name>
-            <time>2014-09-24T14:57:30Z</time>
-</wpt>
+            <time>2014-09-24T14:55:45Z</time>
+        </wpt>
+        
+            <wpt lat="51.510691" lon="-0.133916">
+                <name>A0</name>
+                <time>2014-09-24T14:56:00Z</time>
+            </wpt>
+            
+            <wpt lat="51.510371" lon="-0.134227">
+                <name>A0</name>
+                <time>2014-09-24T14:56:15Z</time>
+            </wpt>
+
+                <wpt lat="51.510079" lon="-0.134551">
+                    <name>A0</name>
+                    <time>2014-09-24T14:56:30Z</time>
+                </wpt>
+
+                    <wpt lat="51.509862" lon="-0.134882">
+                        <name>A0</name>
+                        <time>2014-09-24T14:56:45Z</time>
+                    </wpt>
+                    
+                    <wpt lat="51.510022" lon="-0.135114">
+                        <name>A0</name>
+                        <time>2014-09-24T14:57:00Z</time>
+                    </wpt>
+
+                        <wpt lat="51.510004" lon="-0.135462">
+                            <name>A0</name>
+                            <time>2014-09-24T14:57:15Z</time>
+                        </wpt>
+               
+                            
+
     
 </gpx>

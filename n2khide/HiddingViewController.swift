@@ -2197,17 +2197,19 @@ func fetchShare() {
                 self.longitudeNextLabel.text = self.getLocationDegreesFrom(longitude: (nextWP2S.coordinates?.longitude)!)
                 self.latitudeNextLabel.text = self.getLocationDegreesFrom(latitude: (nextWP2S.coordinates?.latitude)!)
                 self.nextLocation = CLLocationCoordinate2DMake((nextWP2S.coordinates?.latitude)!, (nextWP2S.coordinates?.longitude)!)
-                self.angle2U = self.getBearing(toPoint: self.nextLocation, longitude:  (self.locationManager?.location?.coordinate.longitude)!, latitude:  (self.locationManager?.location?.coordinate.latitude)!)
-                self.hintLabel.text = nextWP2S.hint
-                self.nameLabel.text = nextWP2S.name
-                self.hintLabel.isHidden = false
-                self.nameLabel.isHidden = false
-                self.latitudeNextLabel.isHidden = false
-                self.longitudeNextLabel.isHidden = false
-                self.compassRing.isHidden = false
-                self.highLabel.text = " < You need to be here >"
-                self.centerImage.image = UIImage(named: "compassClip")
-                self.compassRing.image = UIImage(named: "compassRing")
+                if self.locationManager?.location?.coordinate.longitude != nil {
+                    self.angle2U = self.getBearing(toPoint: self.nextLocation, longitude:  (self.locationManager?.location?.coordinate.longitude)!, latitude:  (self.locationManager?.location?.coordinate.latitude)!)
+                    self.hintLabel.text = nextWP2S.hint
+                    self.nameLabel.text = nextWP2S.name
+                    self.hintLabel.isHidden = false
+                    self.nameLabel.isHidden = false
+                    self.latitudeNextLabel.isHidden = false
+                    self.longitudeNextLabel.isHidden = false
+                    self.compassRing.isHidden = false
+                    self.highLabel.text = " < You need to be here >"
+                    self.centerImage.image = UIImage(named: "compassClip")
+                    self.compassRing.image = UIImage(named: "compassRing")
+                }
             } else {
                     // you have a beacon record
                     self.centerImage.image = UIImage(named: "ibeacon-logo")
