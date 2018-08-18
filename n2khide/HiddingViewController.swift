@@ -1501,13 +1501,17 @@ private func getSECoordinate(mRect: MKMapRect) -> CLLocationCoordinate2D {
     }
     
     func setRecord(wp2S: wayPoint, record:CKRecord?, p2S:Int, reorder: Bool) -> CKRecord {
-        let long2F:Double = (wp2S.coordinates?.longitude)!
-        let lat2F:Double = (wp2S.coordinates?.latitude)!
-        record?.setObject(long2F as CKRecordValue, forKey: Constants.Attribute.longitude)
-        record?.setObject(lat2F as CKRecordValue, forKey: Constants.Attribute.latitude)
+        if wp2S.coordinates?.longitude != nil {
+            let long2F:Double = (wp2S.coordinates?.longitude)!
+            let lat2F:Double = (wp2S.coordinates?.latitude)!
+            record?.setObject(long2F as CKRecordValue, forKey: Constants.Attribute.longitude)
+            record?.setObject(lat2F as CKRecordValue, forKey: Constants.Attribute.latitude)
+        }
         record?.setObject(wp2S.name as CKRecordValue?, forKey: Constants.Attribute.name)
         record?.setObject(wp2S.hint as CKRecordValue?, forKey: Constants.Attribute.hint)
-        record?.setObject((wp2S.boxes! as CKRecordValue), forKey:  Constants.Attribute.boxes)
+        if wp2S.boxes != nil {
+            record?.setObject((wp2S.boxes! as CKRecordValue), forKey:  Constants.Attribute.boxes)
+        }
         record?.setObject(wp2S.major as CKRecordValue?, forKey:  Constants.Attribute.major)
         record?.setObject(wp2S.minor as CKRecordValue?, forKey:  Constants.Attribute.minor)
         record?.setObject(wp2S.proximity?.rawValue as CKRecordValue?, forKey:  Constants.Attribute.proximity)
